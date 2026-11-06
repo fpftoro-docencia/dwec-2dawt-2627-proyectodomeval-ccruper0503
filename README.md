@@ -197,6 +197,6 @@ https://trello.com/invite/b/6aec9ce9063c16b7c0047ea8/ATTI178831c6a60f25f26ec0e00
 
 | Rama | Funcionalidad | *Pull request* |
 |------|---------------|----------------|
-| | | |
-
+| `sprint-1-maquetacion` | Maquetación base de las 5 páginas y estilos | [#2](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/2) |
+| `sprint-1-avisos` | Módulo de avisos y CustomEvent | [#3](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/3) |
 **Versión de entrega:** `v1.0`
