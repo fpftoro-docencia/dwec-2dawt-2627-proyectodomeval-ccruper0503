@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportLog · Mis entrenamientos</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <!-- Cabecera común de las páginas privadas -->
+    <header class="cabecera-privada">
+      <div class="container py-2 d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-4">
+          <a class="marca" href="listado.html">
+            <span class="marca-icono">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 12h4l3-8 4 16 3-8h4" />
+              </svg>
+            </span>
+            SportLog
+          </a>
+          <nav aria-label="Principal">
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link active" href="listado.html" aria-current="page"
+                  >Entrenamientos</a
+                >
+              </li>
+              <li class="nav-item" id="menu-usuarios" hidden>
+                <a class="nav-link" href="usuarios.html">Usuarios</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="sesion-info">
+          <span class="avatar" id="sesion-avatar" aria-hidden="true">?</span>
+          <strong id="sesion-usuario">—</strong>
+          <span id="sesion-rol" class="etiqueta-rol">—</span>
+          <button type="button" class="btn btn-outline-light btn-sm" id="btn-cerrar-sesion">
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container py-4">
+      <!-- Región accesible de avisos -->
+      <div id="contenedor-avisos" class="region-avisos mb-3" role="status" aria-live="polite"></div>
+
+      <div class="cabecera-pagina">
+        <div>
+          <h1>Mis entrenamientos</h1>
+          <p>Consulta y gestiona tu diario de sesiones deportivas.</p>
+        </div>
+        <a href="ficha.html" class="btn btn-primary" id="btn-nuevo-entrenamiento"
+          >Nuevo entrenamiento</a
+        >
+      </div>
+
+      <section class="panel panel-vacio" aria-label="Listado de entrenamientos">
+        <span class="icono-vacio">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+          </svg>
+        </span>
+        <h2>Aún no hay entrenamientos</h2>
+        <p class="mb-0">El listado con buscador y paginación llegará en el sprint 2.</p>
+      </section>
+    </main>
+
+    <footer class="pie">SportLog · Proyecto DWEC</footer>
+  </body>
+</html>

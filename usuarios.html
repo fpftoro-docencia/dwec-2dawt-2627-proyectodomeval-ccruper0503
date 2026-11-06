@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportLog · Usuarios</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <!-- Cabecera común de las páginas privadas -->
+    <header class="cabecera-privada">
+      <div class="container py-2 d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-4">
+          <a class="marca" href="listado.html">
+            <span class="marca-icono">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 12h4l3-8 4 16 3-8h4" />
+              </svg>
+            </span>
+            SportLog
+          </a>
+          <nav aria-label="Principal">
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link" href="listado.html">Entrenamientos</a>
+              </li>
+              <li class="nav-item" id="menu-usuarios" hidden>
+                <a class="nav-link active" href="usuarios.html" aria-current="page">Usuarios</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="sesion-info">
+          <span class="avatar" id="sesion-avatar" aria-hidden="true">?</span>
+          <strong id="sesion-usuario">—</strong>
+          <span id="sesion-rol" class="etiqueta-rol">—</span>
+          <button type="button" class="btn btn-outline-light btn-sm" id="btn-cerrar-sesion">
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container py-4">
+      <!-- Región accesible de avisos -->
+      <div id="contenedor-avisos" class="region-avisos mb-3" role="status" aria-live="polite"></div>
+
+      <div class="cabecera-pagina">
+        <div>
+          <h1>Gestión de usuarios</h1>
+          <p>Zona de administración: consulta los usuarios y sus roles.</p>
+        </div>
+      </div>
+
+      <section class="panel panel-vacio" aria-label="Listado de usuarios">
+        <span class="icono-vacio">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM21 21v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75"
+            />
+          </svg>
+        </span>
+        <h2>Tabla de usuarios en construcción</h2>
+        <p class="mb-0">La gestión de roles llegará en el sprint 2.</p>
+      </section>
+    </main>
+
+    <footer class="pie">SportLog · Proyecto DWEC</footer>
+  </body>
+</html>

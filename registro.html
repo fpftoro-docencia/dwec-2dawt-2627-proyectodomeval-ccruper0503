@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportLog · Registro</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="pagina-acceso">
+      <aside class="acceso-lateral" aria-hidden="true">
+        <span class="marca">
+          <span class="marca-icono">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 12h4l3-8 4 16 3-8h4" />
+            </svg>
+          </span>
+          SportLog
+        </span>
+        <div>
+          <h2 class="display-6">Empieza hoy<br />tu diario deportivo.</h2>
+          <p class="text-secondary mb-4">Crear tu cuenta lleva menos de un minuto.</p>
+          <ul>
+            <li>Gratis y sin anuncios</li>
+            <li>Tus datos se guardan en tu navegador</li>
+            <li>El primer usuario registrado será administrador</li>
+          </ul>
+        </div>
+        <small class="text-secondary">© SportLog · Proyecto DWEC</small>
+      </aside>
+
+      <main class="acceso-principal">
+        <div class="acceso-caja">
+          <!-- Región accesible de avisos -->
+          <div id="contenedor-avisos" class="region-avisos" role="status" aria-live="polite"></div>
+
+          <h1 class="h3 fw-bold mb-1">Crea tu cuenta</h1>
+          <p class="text-secondary mb-4">Rellena tus datos para registrarte.</p>
+
+          <form id="formulario-registro" novalidate>
+            <div class="mb-3">
+              <label for="nombre-usuario" class="form-label">Nombre de usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre-usuario"
+                name="nombreUsuario"
+                autocomplete="username"
+                required
+              />
+              <div class="invalid-feedback" id="error-usuario"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                id="correo"
+                name="correo"
+                autocomplete="email"
+                required
+              />
+              <div class="invalid-feedback" id="error-correo"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="clave" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="clave"
+                name="clave"
+                autocomplete="new-password"
+                required
+              />
+              <div class="invalid-feedback" id="error-clave"></div>
+              <ul id="requisitos-clave" class="requisitos-clave list-unstyled small mt-2 mb-0">
+                <li id="req-longitud">Al menos 8 caracteres</li>
+                <li id="req-minuscula">Una letra minúscula</li>
+                <li id="req-mayuscula">Una letra mayúscula</li>
+                <li id="req-cifra">Una cifra</li>
+              </ul>
+            </div>
+
+            <div class="mb-3">
+              <label for="repetir-clave" class="form-label">Repite la contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="repetir-clave"
+                name="repetirClave"
+                autocomplete="new-password"
+                required
+              />
+              <div class="invalid-feedback" id="error-repetir-clave"></div>
+            </div>
+
+            <div class="form-check mb-4">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="terminos"
+                name="terminos"
+                required
+              />
+              <label class="form-check-label" for="terminos"
+                >Acepto los términos y condiciones</label
+              >
+              <div class="invalid-feedback" id="error-terminos"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" id="btn-registro">
+              Crear cuenta
+            </button>
+          </form>
+
+          <p class="text-center text-secondary mt-4 mb-0">
+            ¿Ya tienes cuenta? <a href="index.html" class="fw-semibold">Inicia sesión</a>
+          </p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
