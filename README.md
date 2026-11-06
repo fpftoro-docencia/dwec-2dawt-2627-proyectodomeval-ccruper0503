@@ -9,8 +9,7 @@
 
 ## Mi proyecto
 
-<!-- Sprint 1. De qué es tu aplicación y para quién, en dos o tres frases. -->
-
+SportLog es una aplicación web para deportistas que permite registrar, planificar y analizar entrenamientos y sesiones deportivas individuales, controlando disciplinas, tiempos, ejercicios y marcas personales.
 **Web publicada:** <!-- https://<proyecto>.vercel.app -->
 
 ### La entidad
@@ -20,23 +19,35 @@
 
 | Campo | Control | Obligatorio | Regla de validación | Mensaje si no se cumple |
 |-------|---------|:-----------:|---------------------|-------------------------|
-| | | | | |
+|Titulo de la sesión |Texto | Si| De 3 a 50 caracteres|El título debe tener entre 3 y 50 caracteres |
+| Disciplina deportiva|Desplegable | Si| Opción válida| Selecciona una disciplina deportiva válida|
+| Fecha del entrenamiento  | Fecha| Si| No posterior a la fecha actual|La fecha no puede ser futura |
+|Duración ( minutos ) | Número| Si| Entero positivo entre 1 y  mins|Introduce una duración válida (entre 1 y 720 min) |
+| ¿Competicion oficial?| Casilla| No| Booleano|- |
+|Dorsal o posicion | Texto|Solo si es competición| Entre 1 y 20 caracteres| Introduce el dorsal o puesto conseguido|
+| Bloque de ejercicios| Texto y Numero| Si ( min 1)| Nombre del ejecicio no vacío y series/repeticiones válidas|Añade al menos un ejercicio a la sesión |
 
 ### El registro de usuarios
 
 | Campo | Control | Regla | Mensaje |
 |-------|---------|-------|---------|
-| | | | |
+| Nombre de usuario | Texto (`input text`) | Alfanumérico y guiones (3-15 caracteres), único | El usuario debe tener de 3 a 15 caracteres y no estar ocupado |
+| Correo electrónico | Email (`input email`) | Formato de correo válido | Introduce un correo electrónico válido |
+| Contraseña | Contraseña (`input password`) | Mínimo 8 caracteres, al menos 1 mayúscula, 1 minúscula y 1 número | La contraseña debe tener al menos 8 caracteres, mayúscula, minúscula y cifra |
+| Repetir contraseña | Contraseña (`input password`) | Debe coincidir con la contraseña | Las contraseñas deben coincidir |
+| Acepto términos | Casilla (`input checkbox`) | Obligatorio marcarla | Debes aceptar los términos y condiciones |
+
+
 
 ### Páginas
 
 | Página | Acceso | Qué hace |
 |--------|--------|----------|
-| `index.html` | Pública | |
-| `registro.html` | Pública | |
-| `listado.html` | Usuarios | |
-| `ficha.html` | Usuarios | |
-| `usuarios.html` | Administradores | |
+| `index.html` | Pública | Formulario de inicio de sesión. Si ya hay sesión activa, redirige a `listado.html`. |
+| `registro.html` | Pública | Registro de nuevos usuarios con comprobador de contraseña. El primer usuario es administrador. |
+| `listado.html` | Usuarios | Pantalla principal privada: listado de entrenamientos con buscador y paginación. |
+| `ficha.html` | Usuarios | Formulario para crear o editar una sesión de entrenamiento deportivo. |
+| `usuarios.html` | Administradores | Zona de administración exclusiva para gestionar usuarios y sus roles. |
 
 ## Arquitectura y módulos
 
@@ -155,7 +166,12 @@
 <!-- Sprint 1. Tu lista de condiciones para dar una tarea por terminada. Cada una tiene que poder
      comprobarse. Si la cambias en algún sprint, di qué cambiaste y por qué. -->
 
-- [ ] <!-- … -->
+Para dar una tarea por terminada en el tablero y poder fusionar su rama a main:
+- [ ] El código pasa `npm run lint` y `npm run format:check` sin avisos ni errores.
+- [ ] La funcionalidad está probada con tests de Vitest y todos pasan en verde (`npm test`).
+- [ ] No se utilizan librerías de terceros en JavaScript ni APIs remotas.
+- [ ] Se comprueba la seguridad de sesión y los permisos de usuario/administrador.
+- [ ] La Pull Request en GitHub tiene el workflow de integración continua en verde.
 
 ### Sprints
 
@@ -169,6 +185,7 @@
 | 3 | `v1.0` | | |
 
 **Tablero de Trello:** <!-- enlace (compartido con el profesor) -->
+https://trello.com/invite/b/6aec9ce9063c16b7c0047ea8/ATTI178831c6a60f25f26ec0e00a2054500d26E02A60/dwec-sportlog
 
 **Blog del proyecto:** [blog/README.md](blog/README.md) <!-- dificultades y problemas conceptuales de cada sprint -->
 

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportLog · Iniciar sesión</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="pagina-acceso">
+      <aside class="acceso-lateral" aria-hidden="true">
+        <span class="marca">
+          <span class="marca-icono">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 12h4l3-8 4 16 3-8h4" />
+            </svg>
+          </span>
+          SportLog
+        </span>
+        <div>
+          <h2 class="display-6">Entrena con cabeza.<br />Mejora con datos.</h2>
+          <p class="text-secondary mb-4">Tu diario deportivo, siempre contigo.</p>
+          <ul>
+            <li>Registra cada sesión: disciplina, duración y ejercicios</li>
+            <li>Anota tus competiciones y tus marcas</li>
+            <li>Consulta tu historial con buscador</li>
+          </ul>
+        </div>
+        <small class="text-secondary">© SportLog · Proyecto DWEC</small>
+      </aside>
+
+      <main class="acceso-principal">
+        <div class="acceso-caja">
+          <!-- Región accesible de avisos -->
+          <div id="contenedor-avisos" class="region-avisos" role="status" aria-live="polite"></div>
+
+          <h1 class="h3 fw-bold mb-1">Bienvenido de nuevo</h1>
+          <p class="text-secondary mb-4">Inicia sesión para ver tus entrenamientos.</p>
+
+          <form id="formulario-login" novalidate>
+            <div class="mb-3">
+              <label for="nombre-usuario" class="form-label">Usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre-usuario"
+                name="nombreUsuario"
+                autocomplete="username"
+                required
+              />
+              <div class="invalid-feedback">Introduce tu nombre de usuario.</div>
+            </div>
+
+            <div class="mb-4">
+              <label for="clave" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="clave"
+                name="clave"
+                autocomplete="current-password"
+                required
+              />
+              <div class="invalid-feedback">Introduce tu contraseña.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" id="btn-login">Entrar</button>
+          </form>
+
+          <p class="text-center text-secondary mt-4 mb-0">
+            ¿Aún no tienes cuenta? <a href="registro.html" class="fw-semibold">Regístrate</a>
+          </p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
