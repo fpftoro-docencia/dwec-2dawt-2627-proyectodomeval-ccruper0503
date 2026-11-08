@@ -26,25 +26,74 @@
                 <path d="M3 12h4l3-8 4 16 3-8h4" />
               </svg>
             </span>
-            SportLog
+            <span>SportLog<span class="marca-punto">.</span></span>
           </a>
           <nav aria-label="Principal">
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link" href="listado.html">Entrenamientos</a>
+                <a class="nav-link" href="listado.html">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    class="me-1"
+                  >
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                  </svg>
+                  Entrenamientos
+                </a>
               </li>
               <li class="nav-item" id="menu-usuarios" hidden>
-                <a class="nav-link" href="usuarios.html">Usuarios</a>
+                <a class="nav-link" href="usuarios.html">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    class="me-1"
+                  >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+                    <circle cx="10" cy="7" r="4" />
+                    <path d="M21 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  Usuarios
+                </a>
               </li>
             </ul>
           </nav>
         </div>
 
         <div class="sesion-info">
-          <span class="avatar" id="sesion-avatar" aria-hidden="true">?</span>
-          <strong id="sesion-usuario">—</strong>
+          <div class="position-relative">
+            <span class="avatar" id="sesion-avatar" aria-hidden="true">?</span>
+            <span class="avatar-online-dot"></span>
+          </div>
+          <strong id="sesion-usuario" class="text-white">—</strong>
           <span id="sesion-rol" class="etiqueta-rol">—</span>
-          <button type="button" class="btn btn-outline-light btn-sm" id="btn-cerrar-sesion">
+          <button
+            type="button"
+            class="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+            id="btn-cerrar-sesion"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
             Cerrar sesión
           </button>
         </div>
@@ -55,33 +104,438 @@
       <!-- Región accesible de avisos -->
       <div id="contenedor-avisos" class="region-avisos mb-3" role="status" aria-live="polite"></div>
 
+      <!-- Cabecera de Página con Título y Navegación de Vuelta -->
       <div class="cabecera-pagina">
         <div>
+          <span class="badge-destacado mb-2">Editor de Sesión</span>
           <h1 id="titulo-ficha">Ficha de entrenamiento</h1>
-          <p>Registra los datos de tu sesión deportiva.</p>
+          <p>
+            Registra o edita los parámetros de tu sesión deportiva con validación en tiempo real.
+          </p>
         </div>
-        <a href="listado.html" class="btn btn-outline-secondary">Volver al listado</a>
-      </div>
-
-      <section class="panel panel-vacio" aria-label="Formulario de entrenamiento">
-        <span class="icono-vacio">
+        <a href="listado.html" class="btn btn-outline-secondary d-flex align-items-center gap-2">
           <svg
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
           >
-            <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
           </svg>
-        </span>
-        <h2>Formulario en construcción</h2>
-        <p class="mb-0">Los campos de la sesión llegarán en el sprint 2.</p>
-      </section>
+          Volver al listado
+        </a>
+      </div>
+
+      <!-- Cuadrícula Principal de Ficha (Formulario + Panel Telemetría) -->
+      <div class="grid-ficha">
+        <!-- Columna Izquierda: Formulario de la Entidad -->
+        <div>
+          <form id="formulario-ficha" class="panel p-4" novalidate>
+            <!-- 1. Datos Principales -->
+            <div class="seccion-formulario">
+              <div class="seccion-formulario-titulo">
+                <span class="badge-numero">1</span>
+                Datos Principales de la Sesión
+              </div>
+
+              <div class="mb-3">
+                <label for="titulo-sesion" class="form-label"> Título del entrenamiento * </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="titulo-sesion"
+                  name="titulo"
+                  placeholder="ej. Rodaje Progresivo 12K o Series de Fuerza"
+                  required
+                />
+                <div class="invalid-feedback" id="error-titulo">
+                  Por favor, introduce un título descriptivo.
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="disciplina" class="form-label"> Disciplina deportiva * </label>
+                  <select class="form-select" id="disciplina" name="disciplina" required>
+                    <option value="" selected disabled>Selecciona disciplina...</option>
+                    <option value="running">🏃 Running / Carrera a pie</option>
+                    <option value="trail">⛰️ Trail Running / Montaña</option>
+                    <option value="ciclismo">🚴 Ciclismo de Carretera</option>
+                    <option value="mtb">🚵 Ciclismo MTB</option>
+                    <option value="fuerza">🏋️ Fuerza / Gimnasio</option>
+                    <option value="natacion">🏊 Natación</option>
+                    <option value="hiit">⚡ HIIT / Cross Training</option>
+                    <option value="otro">🎯 Otra disciplina</option>
+                  </select>
+                  <div class="invalid-feedback" id="error-disciplina">
+                    Selecciona una disciplina.
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fecha" class="form-label"> Fecha del entrenamiento * </label>
+                  <input type="date" class="form-control" id="fecha" name="fecha" required />
+                  <div class="invalid-feedback" id="error-fecha">Indica la fecha de la sesión.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Métricas y Rendimiento -->
+            <div class="seccion-formulario">
+              <div class="seccion-formulario-titulo">
+                <span class="badge-numero">2</span>
+                Métricas y Volumen Fisiológico
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-sm-6 col-lg-3">
+                  <label for="duracion" class="form-label">Duración (min) *</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="duracion"
+                    name="duracion"
+                    min="1"
+                    max="1440"
+                    placeholder="60"
+                    required
+                  />
+                  <div class="invalid-feedback" id="error-duracion">Mínimo 1 minuto.</div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                  <label for="distancia" class="form-label">Distancia (km)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    id="distancia"
+                    name="distancia"
+                    min="0"
+                    placeholder="10.5"
+                  />
+                  <div class="invalid-feedback" id="error-distancia">Distancia no válida.</div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                  <label for="frecuencia-cardiaca" class="form-label">Pulso Medio (ppm)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="frecuencia-cardiaca"
+                    name="frecuenciaCardiaca"
+                    min="40"
+                    max="230"
+                    placeholder="155"
+                  />
+                  <div class="invalid-feedback" id="error-frecuencia">Entre 40 y 230 ppm.</div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                  <label for="calorias" class="form-label">Calorías (kcal)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="calorias"
+                    name="calorias"
+                    min="0"
+                    placeholder="650"
+                  />
+                  <div class="invalid-feedback" id="error-calorias">Valor calórico inválido.</div>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label for="esfuerzo-rpe" class="form-label mb-0">
+                    Esfuerzo Percibido (RPE Escala Borg)
+                  </label>
+                  <span id="valor-rpe" class="badge-rpe">RPE 7 · Duro / Umbral</span>
+                </div>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="esfuerzo-rpe"
+                  name="esfuerzoRpe"
+                  min="1"
+                  max="10"
+                  value="7"
+                />
+                <div
+                  class="d-flex justify-content-between text-secondary"
+                  style="font-size: 0.72rem"
+                >
+                  <span>1 - Muy suave</span>
+                  <span>5 - Moderado</span>
+                  <span>7 - Duro</span>
+                  <span>10 - Esfuerzo Máximo</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Campo Condicional (Sprint 2 Requisito 13) -->
+            <div class="seccion-formulario">
+              <div class="seccion-formulario-titulo">
+                <span class="badge-numero">3</span>
+                Competición Oficial (Condicional)
+              </div>
+
+              <div class="form-check form-switch mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="es-competicion"
+                  name="esCompeticion"
+                />
+                <label class="form-check-label fw-bold text-white" for="es-competicion">
+                  🏆 Esta sesión fue una competición o carrera oficial
+                </label>
+              </div>
+
+              <div
+                id="campo-condicional-competicion"
+                class="p-3 rounded border border-secondary border-opacity-25"
+                style="background: rgba(15, 23, 42, 0.45)"
+              >
+                <div class="row g-3">
+                  <div class="col-md-7">
+                    <label for="nombre-competicion" class="form-label"
+                      >Nombre del Evento / Carrera</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="nombre-competicion"
+                      name="nombreCompeticion"
+                      placeholder="ej. Media Maratón Behobia-San Sebastián"
+                    />
+                  </div>
+                  <div class="col-md-5">
+                    <label for="dorsal" class="form-label">Dorsal / Posición</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="dorsal"
+                      name="dorsal"
+                      placeholder="ej. Dorsal #412 (Puesto 84)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Grupo Dinámico de Ejercicios (Sprint 2 Requisito 13) -->
+            <div class="seccion-formulario">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="seccion-formulario-titulo mb-0">
+                  <span class="badge-numero">4</span>
+                  Bloque de Ejercicios / Intervalos Específicos
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  id="btn-anadir-ejercicio"
+                >
+                  + Añadir fila
+                </button>
+              </div>
+
+              <div id="contenedor-ejercicios" class="d-flex flex-column gap-2 mb-2">
+                <!-- Fila de ejemplo 1 -->
+                <div
+                  class="d-flex align-items-center gap-2 p-2 rounded border border-secondary border-opacity-10"
+                  style="background: rgba(15, 23, 42, 0.4)"
+                >
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="ejercicioNombre[]"
+                    placeholder="Nombre ejercicio (ej. Sentadilla libre o Intervalos 400m)"
+                    value="Sentadilla búlgara con mancuernas"
+                  />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="ejercicioDetalle[]"
+                    placeholder="Series x Reps (ej. 4 x 10 con 18kg)"
+                    value="4 series x 10 reps @ 20kg"
+                    style="max-width: 14rem"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm px-2"
+                    title="Eliminar fila"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Sensaciones y Notas -->
+            <div class="seccion-formulario">
+              <div class="seccion-formulario-titulo">
+                <span class="badge-numero">5</span>
+                Sensaciones y Observaciones
+              </div>
+
+              <div>
+                <label for="notas" class="form-label">Notas del atleta</label>
+                <textarea
+                  class="form-control"
+                  id="notas"
+                  name="notas"
+                  rows="3"
+                  placeholder="Detalla climatología, sensaciones de energía, zapatillas empleadas, nutrición e hidratación..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div
+              class="d-flex align-items-center justify-content-end gap-3 mt-4 pt-3 border-top border-secondary border-opacity-10"
+            >
+              <a href="listado.html" class="btn btn-outline-secondary">Cancelar</a>
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg btn-brillo px-4"
+                id="btn-guardar-ficha"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                  <polyline points="17 21 17 13 7 13 7 21" />
+                  <polyline points="7 3 7 8 15 8" />
+                </svg>
+                Guardar entrenamiento
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Columna Derecha: Telemetría en Vivo & Consejero Deportivo -->
+        <aside class="sidebar-telemetria">
+          <div class="tarjeta-telemetria">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="fw-bold text-white d-flex align-items-center gap-2">
+                <div class="marca-icono" style="width: 1.8rem; height: 1.8rem">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg>
+                </div>
+                Telemetría en Vivo
+              </div>
+              <span class="hud-live-tag">
+                <span class="hud-live-punto"></span>
+                Calculando
+              </span>
+            </div>
+
+            <div class="telemetria-gauge-wrapper">
+              <div class="barra-progreso-carga">
+                <div class="barra-progreso-carga-relleno"></div>
+              </div>
+              <div class="d-flex justify-content-between text-secondary" style="font-size: 0.72rem">
+                <span>Recuperación</span>
+                <span class="text-white fw-bold">Carga Óptima (+68%)</span>
+                <span>Sobrecarga</span>
+              </div>
+            </div>
+
+            <div
+              class="d-flex flex-column gap-2 pt-2 border-top border-secondary border-opacity-10"
+            >
+              <div class="d-flex justify-content-between small">
+                <span class="text-secondary">Ritmo proyectado:</span>
+                <strong class="text-white font-monospace">4:40 min/km</strong>
+              </div>
+              <div class="d-flex justify-content-between small">
+                <span class="text-secondary">Tiempo en zona Z3:</span>
+                <strong class="text-white font-monospace">42 minutos</strong>
+              </div>
+              <div class="d-flex justify-content-between small">
+                <span class="text-secondary">Hidratación sugerida:</span>
+                <strong class="text-info font-monospace">~650 ml agua + sales</strong>
+              </div>
+              <div class="d-flex justify-content-between small">
+                <span class="text-secondary">Recuperación estimada:</span>
+                <strong class="text-warning font-monospace">24 a 36 horas</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="tarjeta-telemetria" style="background: rgba(17, 24, 39, 0.6)">
+            <div class="fw-bold text-white small mb-2 d-flex align-items-center gap-2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#f59e0b"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+              </svg>
+              Consejo del Entrenador SportLog
+            </div>
+            <p class="text-secondary small mb-0" style="line-height: 1.55">
+              Recuerda registrar la frecuencia cardíaca promedio para que tus zonas de potencia y
+              umbral anaeróbico se recalculen automáticamente en los informes semanales.
+            </p>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Plantilla de fila dinámica de ejercicio para Sprint 2 -->
+      <template id="plantilla-ejercicio">
+        <div
+          class="d-flex align-items-center gap-2 p-2 rounded border border-secondary border-opacity-10"
+          style="background: rgba(15, 23, 42, 0.4)"
+        >
+          <input
+            type="text"
+            class="form-control form-control-sm campo-ejercicio-nombre"
+            name="ejercicioNombre[]"
+            placeholder="Nombre del ejercicio o intervalo"
+            required
+          />
+          <input
+            type="text"
+            class="form-control form-control-sm campo-ejercicio-detalle"
+            name="ejercicioDetalle[]"
+            placeholder="Series x Reps @ Carga"
+            style="max-width: 14rem"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-danger btn-sm px-2 boton-quitar-ejercicio"
+            title="Eliminar fila"
+          >
+            ✕
+          </button>
+        </div>
+      </template>
     </main>
 
-    <footer class="pie">SportLog · Proyecto DWEC</footer>
+    <footer class="pie">SportLog · Proyecto DWEC · Plataforma de Alto Rendimiento Deportivo</footer>
   </body>
 </html>

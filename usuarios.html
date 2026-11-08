@@ -26,25 +26,74 @@
                 <path d="M3 12h4l3-8 4 16 3-8h4" />
               </svg>
             </span>
-            SportLog
+            <span>SportLog<span class="marca-punto">.</span></span>
           </a>
           <nav aria-label="Principal">
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link" href="listado.html">Entrenamientos</a>
+                <a class="nav-link" href="listado.html">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    class="me-1"
+                  >
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                  </svg>
+                  Entrenamientos
+                </a>
               </li>
-              <li class="nav-item" id="menu-usuarios" hidden>
-                <a class="nav-link active" href="usuarios.html" aria-current="page">Usuarios</a>
+              <li class="nav-item" id="menu-usuarios">
+                <a class="nav-link active" href="usuarios.html" aria-current="page">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    class="me-1"
+                  >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+                    <circle cx="10" cy="7" r="4" />
+                    <path d="M21 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  Usuarios
+                </a>
               </li>
             </ul>
           </nav>
         </div>
 
         <div class="sesion-info">
-          <span class="avatar" id="sesion-avatar" aria-hidden="true">?</span>
-          <strong id="sesion-usuario">—</strong>
-          <span id="sesion-rol" class="etiqueta-rol">—</span>
-          <button type="button" class="btn btn-outline-light btn-sm" id="btn-cerrar-sesion">
+          <div class="position-relative">
+            <span class="avatar" id="sesion-avatar" aria-hidden="true">?</span>
+            <span class="avatar-online-dot"></span>
+          </div>
+          <strong id="sesion-usuario" class="text-white">—</strong>
+          <span id="sesion-rol" class="etiqueta-rol admin">—</span>
+          <button
+            type="button"
+            class="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+            id="btn-cerrar-sesion"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
             Cerrar sesión
           </button>
         </div>
@@ -55,14 +104,406 @@
       <!-- Región accesible de avisos -->
       <div id="contenedor-avisos" class="region-avisos mb-3" role="status" aria-live="polite"></div>
 
+      <!-- Cabecera de Página con Título y Contexto Admin -->
       <div class="cabecera-pagina">
         <div>
-          <h1>Gestión de usuarios</h1>
-          <p>Zona de administración: consulta los usuarios y sus roles.</p>
+          <span class="badge-destacado mb-2">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              />
+            </svg>
+            Zona de Administración
+          </span>
+          <h1>Gestión de usuarios y roles</h1>
+          <p>
+            Supervisa los deportistas registrados, niveles de acceso y gobernanza de la plataforma.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span
+            class="badge-destacado mb-0"
+            style="
+              background: rgba(16, 185, 129, 0.15);
+              border-color: rgba(16, 185, 129, 0.3);
+              color: #34d399;
+            "
+          >
+            ● Modo Seguro Activo
+          </span>
         </div>
       </div>
 
-      <section class="panel panel-vacio" aria-label="Listado de usuarios">
+      <!-- Métricas de Control de la Plataforma -->
+      <section class="rejilla-kpis" aria-label="Métricas de administración">
+        <div class="tarjeta-kpi">
+          <div class="kpi-icono-caja fuego">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+              <circle cx="10" cy="7" r="4" />
+              <path d="M21 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <div class="kpi-contenido">
+            <span class="kpi-titulo">Total Usuarios</span>
+            <span class="kpi-valor">8</span>
+            <span class="kpi-meta">+2 nuevos esta semana</span>
+          </div>
+        </div>
+
+        <div class="tarjeta-kpi">
+          <div class="kpi-icono-caja energia">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              />
+            </svg>
+          </div>
+          <div class="kpi-contenido">
+            <span class="kpi-titulo">Administradores</span>
+            <span class="kpi-valor">2</span>
+            <span class="kpi-meta text-warning">Acceso privilegiado</span>
+          </div>
+        </div>
+
+        <div class="tarjeta-kpi">
+          <div class="kpi-icono-caja tiempo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <div class="kpi-contenido">
+            <span class="kpi-titulo">Cifrado de Claves</span>
+            <span class="kpi-valor">SHA-256</span>
+            <span class="kpi-meta text-success">Hashes irreversibles</span>
+          </div>
+        </div>
+
+        <div class="tarjeta-kpi">
+          <div class="kpi-icono-caja distancia">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg>
+          </div>
+          <div class="kpi-contenido">
+            <span class="kpi-titulo">Almacenamiento</span>
+            <span class="kpi-valor">24.5 <small style="font-size: 0.75rem">KB</small></span>
+            <span class="kpi-meta">Client LocalStorage</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Barra de Filtros y Búsqueda de Usuarios -->
+      <section class="barra-filtros" aria-label="Buscador de usuarios">
+        <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 24rem">
+          <div class="input-con-icono w-100">
+            <span class="icono-input">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </span>
+            <input
+              type="search"
+              id="campo-buscar-usuarios"
+              class="form-control"
+              placeholder="Buscar por usuario o correo..."
+              aria-label="Buscar usuarios"
+            />
+          </div>
+        </div>
+
+        <div class="pills-disciplinas">
+          <button type="button" class="pill-filtro activo">Todos (8)</button>
+          <button type="button" class="pill-filtro">👑 Administradores (2)</button>
+          <button type="button" class="pill-filtro">🏃 Deportistas (6)</button>
+        </div>
+
+        <div>
+          <span class="badge-destacado mb-0" id="contador-usuarios" style="font-size: 0.75rem">
+            Mostrando 4 usuarios
+          </span>
+        </div>
+      </section>
+
+      <!-- Tabla / Data Grid de Usuarios -->
+      <div class="panel p-0 overflow-hidden" aria-label="Tabla de usuarios">
+        <div class="tabla-usuarios-wrapper">
+          <table class="tabla-usuarios mb-0">
+            <thead>
+              <tr>
+                <th>Deportista</th>
+                <th>Correo Electrónico</th>
+                <th>Rol Asignado</th>
+                <th>Fecha de Alta</th>
+                <th class="text-end">Acción de Permisos</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpo-tabla-usuarios">
+              <!-- Fila 1: Admin Actual -->
+              <tr>
+                <td>
+                  <div class="usuario-celda">
+                    <div
+                      class="usuario-avatar-chico"
+                      style="
+                        background: linear-gradient(135deg, #f59e0b, #d97706);
+                        box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+                      "
+                    >
+                      AD
+                    </div>
+                    <div>
+                      <div class="fw-bold text-white">admin</div>
+                      <div class="text-secondary small" style="font-size: 0.72rem">
+                        👑 Creador del sistema
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-secondary font-monospace small">admin@sportlog.es</td>
+                <td>
+                  <span class="badge-rol admin">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                      />
+                    </svg>
+                    Administrador
+                  </span>
+                </td>
+                <td class="text-secondary small">01/11/2026</td>
+                <td class="text-end">
+                  <div class="d-inline-flex flex-column align-items-end">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm"
+                      disabled
+                      title="No puedes quitarte el rol de administrador a ti mismo"
+                    >
+                      Quitar rol (desactivado)
+                    </button>
+                    <span class="text-secondary mt-1" style="font-size: 0.68rem">
+                      🔒 Tu usuario actual
+                    </span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 2: Usuario Estándar -->
+              <tr>
+                <td>
+                  <div class="usuario-celda">
+                    <div
+                      class="usuario-avatar-chico"
+                      style="background: linear-gradient(135deg, #06b6d4, #0284c7)"
+                    >
+                      CR
+                    </div>
+                    <div>
+                      <div class="fw-bold text-white">christian_runner</div>
+                      <div class="text-secondary small" style="font-size: 0.72rem">
+                        Atleta Maratón
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-secondary font-monospace small">christian@sportlog.es</td>
+                <td>
+                  <span class="badge-rol usuario">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    Usuario
+                  </span>
+                </td>
+                <td class="text-secondary small">03/11/2026</td>
+                <td class="text-end">
+                  <button
+                    type="button"
+                    class="btn btn-outline-warning btn-sm d-inline-flex align-items-center gap-1"
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                      />
+                    </svg>
+                    Hacer Administrador
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Fila 3: Admin 2 -->
+              <tr>
+                <td>
+                  <div class="usuario-celda">
+                    <div
+                      class="usuario-avatar-chico"
+                      style="
+                        background: linear-gradient(135deg, #f59e0b, #d97706);
+                        box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+                      "
+                    >
+                      MT
+                    </div>
+                    <div>
+                      <div class="fw-bold text-white">maria_triatleta</div>
+                      <div class="text-secondary small" style="font-size: 0.72rem">
+                        Triatlón Media Distancia
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-secondary font-monospace small">maria@sportlog.es</td>
+                <td>
+                  <span class="badge-rol admin">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                      />
+                    </svg>
+                    Administrador
+                  </span>
+                </td>
+                <td class="text-secondary small">05/11/2026</td>
+                <td class="text-end">
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1"
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="15" y1="9" x2="9" y2="15" />
+                      <line x1="9" y1="9" x2="15" y2="15" />
+                    </svg>
+                    Quitar Administrador
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Fila 4: Usuario 3 -->
+              <tr>
+                <td>
+                  <div class="usuario-celda">
+                    <div
+                      class="usuario-avatar-chico"
+                      style="background: linear-gradient(135deg, #10b981, #059669)"
+                    >
+                      DF
+                    </div>
+                    <div>
+                      <div class="fw-bold text-white">david_fuerza</div>
+                      <div class="text-secondary small" style="font-size: 0.72rem">
+                        Powerlifting & Hipertrofia
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-secondary font-monospace small">david@sportlog.es</td>
+                <td>
+                  <span class="badge-rol usuario">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    Usuario
+                  </span>
+                </td>
+                <td class="text-secondary small">07/11/2026</td>
+                <td class="text-end">
+                  <button
+                    type="button"
+                    class="btn btn-outline-warning btn-sm d-inline-flex align-items-center gap-1"
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                      />
+                    </svg>
+                    Hacer Administrador
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel de Estado Vacío (Preservado para sustitución / sin usuarios) -->
+      <section
+        class="panel panel-vacio mt-4"
+        id="panel-vacio-usuarios"
+        aria-label="Listado de usuarios"
+        style="display: none"
+      >
         <span class="icono-vacio">
           <svg
             viewBox="0 0 24 24"
@@ -78,11 +519,63 @@
             />
           </svg>
         </span>
-        <h2>Tabla de usuarios en construcción</h2>
-        <p class="mb-0">La gestión de roles llegará en el sprint 2.</p>
+        <h2>No hay usuarios que coincidan con la búsqueda</h2>
+        <p class="mb-0">Prueba con otro término de búsqueda o limpia los filtros.</p>
       </section>
+
+      <!-- Paginación de Usuarios -->
+      <nav
+        class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top border-secondary border-opacity-10"
+        aria-label="Navegación de usuarios"
+      >
+        <div class="text-secondary small">
+          Página <strong>1</strong> de <strong>2</strong> · Mostrando <strong>4</strong> de
+          <strong>8</strong> deportistas
+        </div>
+        <ul class="paginacion-lista">
+          <li class="paginacion-item">
+            <button type="button" class="btn-pagina" disabled aria-label="Página anterior">
+              ← Anterior
+            </button>
+          </li>
+          <li class="paginacion-item">
+            <button type="button" class="btn-pagina activo" aria-current="page">1</button>
+          </li>
+          <li class="paginacion-item">
+            <button type="button" class="btn-pagina">2</button>
+          </li>
+          <li class="paginacion-item">
+            <button type="button" class="btn-pagina" aria-label="Página siguiente">
+              Siguiente →
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Plantilla HTML de Fila para Sprint 2 -->
+      <template id="plantilla-fila-usuario">
+        <tr>
+          <td>
+            <div class="usuario-celda">
+              <div class="usuario-avatar-chico"></div>
+              <div>
+                <div class="fw-bold text-white usuario-nombre"></div>
+                <div class="text-secondary small usuario-tag" style="font-size: 0.72rem"></div>
+              </div>
+            </div>
+          </td>
+          <td class="text-secondary font-monospace small usuario-correo"></td>
+          <td>
+            <span class="badge-rol"></span>
+          </td>
+          <td class="text-secondary small usuario-fecha"></td>
+          <td class="text-end">
+            <button type="button" class="btn btn-sm boton-accion-rol"></button>
+          </td>
+        </tr>
+      </template>
     </main>
 
-    <footer class="pie">SportLog · Proyecto DWEC</footer>
+    <footer class="pie">SportLog · Proyecto DWEC · Plataforma de Alto Rendimiento Deportivo</footer>
   </body>
 </html>
