@@ -142,23 +142,26 @@
 
 ## 🚧 En Progreso
 
-- [ ] **Planificación e inicio del Sprint 2 (v0.2):** Preparación del CRUD de la entidad deportiva, zona de administración, paginación y búsqueda.
-  - *Estado:* 0% de código implementado (Sprint 1 recién cerrado y verificado).
-  - *Siguiente paso:* Crear las tarjetas correspondientes al Sprint 2 en Trello, abrir la primera rama de características y modelar los datos de entrenamientos por usuario.
+- [ ] **Sprint 2 (v0.2): CRUD de Entidades, Administración y CI Completa:**
+  - *Estado:* Tarjetas S2-01 a S2-11 generadas y sincronizadas en la columna «Por hacer» de Trello.
+  - *Siguiente paso inmediato:* Comenzar con la tarea `S2-01: Módulo de datos de Entidades y almacenamiento por usuario` en la rama `sprint-2-entidades`.
 
 ---
 
 ## 📌 Pendiente (Backlog)
 
-### Must have (Obligatorio para Sprint 2 · v0.2)
-- [ ] **Almacenamiento de Entidades Deportivas (Requisito 14):** Guardar entrenamientos en `localStorage` bajo clave por usuario (ej. `sportlog_entrenamientos_<usuario>`), con IDs únicos (UUID/timestamp) y resiliencia a JSON corrupto. — Prioridad: Alta — Dep: S1-05
-- [ ] **Formulario de Ficha Deportiva (Requisito 17):** Alta y edición de sesiones (`ficha.html`) mediante `FormData`, con campo condicional (Dorsal/Puesto visible y activo solo si es competición) y restricciones de fecha (`max` = hoy). — Prioridad: Alta — Dep: Entidades
-- [ ] **Grupo dinámico de ejercicios (Requisito 17):** Añadir/quitar bloques de ejercicios desde `<template>` con límites (mínimo 1, máximo 5), IDs únicos y vinculación accesible de etiquetas (`htmlFor`). — Prioridad: Alta — Dep: Ficha
-- [ ] **Validadores propios de la temática (Requisito 13):** Al menos 3 validadores con expresiones regulares específicos de deporte (ritmo min/km, formato de series x repeticiones, etc.), incluyendo regla con comprobación matemática/código. — Prioridad: Alta — Dep: Validadores
-- [ ] **Módulo de Paginación Pura (Requisito 16):** Función pura `paginar(lista, pagina, porPagina)` con corrección de páginas inválidas, enlaces con `aria-current="page"` y sincronización con URL (`?pagina=X`). — Prioridad: Alta — Dep: Ninguna
-- [ ] **Listado y Buscador con Debounce (Requisito 15):** Renderizado en `listado.html` desde `<template>` con `textContent`, buscador insensible a mayúsculas/tildes, contador de resultados y borrado modal con `<dialog>`. — Prioridad: Alta — Dep: Paginación, Entidades
-- [ ] **Zona de Administración (Requisitos 7 y 20):** Implementación de `usuarios.html` para listar usuarios de la app, buscador, paginación y cambio reactivo de roles respetando que siempre exista al menos un administrador. — Prioridad: Alta — Dep: S1-05, Paginación
-- [ ] **Integración Continua Paso 2 (Requisito 22):** Ampliar `ci.yml` con job de `E2E` (Playwright), control de `concurrency` y artefactos de cobertura (`coverage/`). — Prioridad: Media — Dep: ci.yml
+### Must have (Tarjetas planificadas para Sprint 2 · v0.2)
+- [ ] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — Prioridad: Alta — Dep: S1-04, S1-05
+- [ ] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — Prioridad: Alta — Dep: Ninguna
+- [ ] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna
+- [ ] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02
+- [ ] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios** — Prioridad: Alta — Dep: S2-04
+- [ ] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — Prioridad: Alta — Dep: S2-02, S2-04
+- [ ] **S2-07: Listado de entrenamientos con buscador con debounce y borrado modal** — Prioridad: Alta — Dep: S2-01, S2-03
+- [ ] **S2-08: Zona de administración de usuarios y gestión de roles** — Prioridad: Alta — Dep: S1-04, S1-05, S2-03
+- [ ] **S2-09: Tests de integración de páginas y pirámide de pruebas** — Prioridad: Alta — Dep: S2-04, S2-07, S2-08
+- [ ] **S2-10: Pruebas End-to-End con Playwright** — Prioridad: Alta — Dep: S2-07, S2-08, S2-09
+- [ ] **S2-11: Integración continua completa (Paso 2) y cierre del Sprint 2 (v0.2)** — Prioridad: Alta — Dep: S2-01 a S2-10
 
 ### Should have (Sprint 3 · v1.0)
 - [ ] **Despliegue Continuo en Vercel (Requisitos 24-25):** Configuración de despliegue automatizado, chequeos de compilación y verificación de rutas limpias. — Prioridad: Media — Dep: Sprint 2
@@ -285,6 +288,7 @@ docker exec -w /workspaces/dwec-2dawt-2627-proyectodomeval-ccruper0503 e6aa7e5a8
 
 | Fecha | Versión | Cambio realizado | Responsable |
 |:---:|:---:|---|:---:|
+| 10/11/2026 | 1.1.0 | Creación y sincronización de las 11 tarjetas de Trello para el Sprint 2 (S2-01 a S2-11) y actualización del backlog. | Lead Architect (Pair AI) |
 | 10/11/2026 | 1.0.0 | Creación inicial del documento tras el cierre y etiquetado del Sprint 1 (`v0.1`). | Lead Architect (Pair AI) |
 
 <!--
