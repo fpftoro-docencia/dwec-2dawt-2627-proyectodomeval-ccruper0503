@@ -141,8 +141,8 @@
           </div>
           <div class="kpi-contenido">
             <span class="kpi-titulo">Sesiones Totales</span>
-            <span class="kpi-valor">24</span>
-            <span class="kpi-meta">+4 esta semana</span>
+            <span class="kpi-valor" id="kpi-sesiones">0</span>
+            <span class="kpi-meta">Sin sesiones registradas</span>
           </div>
         </div>
 
@@ -155,8 +155,8 @@
           </div>
           <div class="kpi-contenido">
             <span class="kpi-titulo">Tiempo Activo</span>
-            <span class="kpi-valor">31h 45m</span>
-            <span class="kpi-meta text-info">Media 52m/sesión</span>
+            <span class="kpi-valor" id="kpi-tiempo">0h 0m</span>
+            <span class="kpi-meta text-secondary">Sin actividad</span>
           </div>
         </div>
 
@@ -170,8 +170,10 @@
           </div>
           <div class="kpi-contenido">
             <span class="kpi-titulo">Distancia Total</span>
-            <span class="kpi-valor">218.4 <small style="font-size: 0.75rem">km</small></span>
-            <span class="kpi-meta">Carrera y Ciclismo</span>
+            <span class="kpi-valor" id="kpi-distancia"
+              >0.0 <small style="font-size: 0.75rem">km</small></span
+            >
+            <span class="kpi-meta">Sin distancia</span>
           </div>
         </div>
 
@@ -185,8 +187,10 @@
           </div>
           <div class="kpi-contenido">
             <span class="kpi-titulo">Gasto Estimado</span>
-            <span class="kpi-valor">18,920 <small style="font-size: 0.75rem">kcal</small></span>
-            <span class="kpi-meta">94% objetivo mensual</span>
+            <span class="kpi-valor" id="kpi-calorias"
+              >0 <small style="font-size: 0.75rem">kcal</small></span
+            >
+            <span class="kpi-meta">0% objetivo mensual</span>
           </div>
         </div>
       </section>
@@ -219,286 +223,29 @@
         </div>
 
         <div class="pills-disciplinas">
-          <button type="button" class="pill-filtro activo">Todos (24)</button>
-          <button type="button" class="pill-filtro">🏃 Running (14)</button>
-          <button type="button" class="pill-filtro">🚴 Ciclismo (6)</button>
-          <button type="button" class="pill-filtro">🏋️ Fuerza (4)</button>
+          <button type="button" class="pill-filtro activo">Todos (0)</button>
         </div>
 
         <div>
           <span class="badge-destacado mb-0" id="contador-resultados" style="font-size: 0.75rem">
-            Mostrando 3 de 24 entrenamientos
+            Mostrando 0 entrenamientos
           </span>
         </div>
       </section>
 
-      <!-- Cuadrícula de Tarjetas de Entrenamientos (Visual Showcase) -->
+      <!-- Cuadrícula de Tarjetas de Entrenamientos -->
       <section
         class="rejilla-entrenamientos"
         id="contenedor-entrenamientos"
         aria-label="Listado de entrenamientos"
-      >
-        <!-- Tarjeta 1: Running -->
-        <article class="tarjeta-entrenamiento">
-          <div>
-            <div class="tarjeta-header">
-              <span class="badge-disciplina running">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                </svg>
-                Running
-              </span>
-              <span class="tarjeta-fecha">Hoy · 08:30h</span>
-            </div>
-            <h3 class="tarjeta-titulo">Rodaje Progresivo 12K</h3>
-            <p class="tarjeta-sensaciones">
-              Ritmo progresivo aumentando cada 3 km. Finalizando los últimos 2 km en ritmo umbral
-              4:10 min/km con excelente frecuencia.
-            </p>
-            <div class="tarjeta-metricas-grid">
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Distancia</span>
-                <span class="t-metrica-num">12.0 <small style="font-size: 0.65rem">km</small></span>
-              </div>
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Tiempo</span>
-                <span class="t-metrica-num">56 <small style="font-size: 0.65rem">min</small></span>
-              </div>
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Ritmo</span>
-                <span class="t-metrica-num"
-                  >4:40 <small style="font-size: 0.65rem">min/km</small></span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="tarjeta-acciones">
-            <span class="badge-rpe me-auto">RPE 7/10</span>
-            <a
-              href="ficha.html?id=1"
-              class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-              Editar
-            </a>
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
-              data-id="1"
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="3 6 5 6 21 6" />
-                <path
-                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                />
-              </svg>
-              Borrar
-            </button>
-          </div>
-        </article>
+        style="display: none"
+      ></section>
 
-        <!-- Tarjeta 2: Fuerza -->
-        <article class="tarjeta-entrenamiento">
-          <div>
-            <div class="tarjeta-header">
-              <span class="badge-disciplina fuerza">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
-                  <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12" />
-                </svg>
-                Fuerza
-              </span>
-              <span class="tarjeta-fecha">Ayer · 18:45h</span>
-            </div>
-            <h3 class="tarjeta-titulo">Torso y Fuerza Hipertrofia</h3>
-            <p class="tarjeta-sensaciones">
-              Press banca 4x8 con 85kg, dominadas lastradas +15kg y remo con barra. Sensación de
-              congestión muscular óptima.
-            </p>
-            <div class="tarjeta-metricas-grid">
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Duración</span>
-                <span class="t-metrica-num">65 <small style="font-size: 0.65rem">min</small></span>
-              </div>
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Volumen</span>
-                <span class="t-metrica-num"
-                  >6,420 <small style="font-size: 0.65rem">kg</small></span
-                >
-              </div>
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Calorías</span>
-                <span class="t-metrica-num"
-                  >480 <small style="font-size: 0.65rem">kcal</small></span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="tarjeta-acciones">
-            <span class="badge-rpe me-auto">RPE 8/10</span>
-            <a
-              href="ficha.html?id=2"
-              class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-              Editar
-            </a>
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
-              data-id="2"
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="3 6 5 6 21 6" />
-                <path
-                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                />
-              </svg>
-              Borrar
-            </button>
-          </div>
-        </article>
-
-        <!-- Tarjeta 3: Ciclismo -->
-        <article class="tarjeta-entrenamiento">
-          <div>
-            <div class="tarjeta-header">
-              <span class="badge-disciplina ciclismo">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
-                  <circle cx="18.5" cy="17.5" r="3.5" />
-                  <circle cx="5.5" cy="17.5" r="3.5" />
-                  <circle cx="15" cy="5" r="1" />
-                  <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
-                </svg>
-                Ciclismo
-              </span>
-              <span class="tarjeta-fecha">05 Nov · 09:15h</span>
-            </div>
-            <h3 class="tarjeta-titulo">Ruta de Fondo Sierra Norte</h3>
-            <p class="tarjeta-sensaciones">
-              Cadencia media de 85 rpm con viento moderado. Desnivel acumulado de +840 metros
-              completados en zona aeróbica Z2-Z3.
-            </p>
-            <div class="tarjeta-metricas-grid">
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Distancia</span>
-                <span class="t-metrica-num">54.2 <small style="font-size: 0.65rem">km</small></span>
-              </div>
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Tiempo</span>
-                <span class="t-metrica-num">2h 10m</span>
-              </div>
-              <div class="t-metrica">
-                <span class="t-metrica-rotulo">Vel. Media</span>
-                <span class="t-metrica-num"
-                  >25.1 <small style="font-size: 0.65rem">km/h</small></span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="tarjeta-acciones">
-            <span class="badge-rpe me-auto">RPE 7/10</span>
-            <a
-              href="ficha.html?id=3"
-              class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-              Editar
-            </a>
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
-              data-id="3"
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="3 6 5 6 21 6" />
-                <path
-                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                />
-              </svg>
-              Borrar
-            </button>
-          </div>
-        </article>
-      </section>
-
-      <!-- Panel de Estado Vacío (Preservado para sustitución / estado sin registros) -->
+      <!-- Panel de Estado Vacío (Visible cuando no hay registros) -->
       <section
         class="panel panel-vacio mt-4"
         id="panel-vacio"
         aria-label="Listado de entrenamientos"
-        style="display: none"
       >
         <span class="icono-vacio">
           <svg
@@ -522,11 +269,13 @@
 
       <!-- Paginación de Entrenamientos -->
       <nav
+        id="paginacion-entrenamientos"
         class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top border-secondary border-opacity-10"
         aria-label="Navegación de entrenamientos"
+        hidden
       >
         <div class="text-secondary small">
-          Página <strong>1</strong> de <strong>3</strong> · Mostrando <strong>3</strong> registros
+          Página <strong>1</strong> de <strong>1</strong> · Mostrando <strong>0</strong> registros
         </div>
         <ul class="paginacion-lista">
           <li class="paginacion-item">
@@ -538,13 +287,7 @@
             <button type="button" class="btn-pagina activo" aria-current="page">1</button>
           </li>
           <li class="paginacion-item">
-            <button type="button" class="btn-pagina">2</button>
-          </li>
-          <li class="paginacion-item">
-            <button type="button" class="btn-pagina">3</button>
-          </li>
-          <li class="paginacion-item">
-            <button type="button" class="btn-pagina" aria-label="Página siguiente">
+            <button type="button" class="btn-pagina" disabled aria-label="Página siguiente">
               Siguiente →
             </button>
           </li>
@@ -620,5 +363,6 @@
     </main>
 
     <footer class="pie">SportLog · Proyecto DWEC · Plataforma de Alto Rendimiento Deportivo</footer>
+    <script type="module" src="js/paginas/listado.js"></script>
   </body>
 </html>
