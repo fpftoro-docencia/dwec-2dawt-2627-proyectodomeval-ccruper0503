@@ -42,7 +42,9 @@ export function iniciarRegistro({
   }
 
   const formulario = documento.getElementById('formulario-registro');
-  if (!formulario) return;
+  if (!formulario) {
+    return;
+  }
 
   const campoUsuario = documento.getElementById('nombre-usuario');
   const campoCorreo = documento.getElementById('correo');
@@ -85,7 +87,9 @@ export function iniciarRegistro({
 
   // Funciones de validación de campos
   function marcarCampo(campo, elementoError, resultado) {
-    if (!campo || !elementoError) return resultado.valido;
+    if (!campo || !elementoError) {
+      return resultado.valido;
+    }
     if (resultado.valido) {
       campo.classList.remove('is-invalid');
       campo.setAttribute('aria-invalid', 'false');
@@ -149,7 +153,9 @@ export function iniciarRegistro({
     evento.preventDefault();
 
     // Bloqueo de envíos múltiples
-    if (enviando) return;
+    if (enviando) {
+      return;
+    }
 
     // Validar todos los campos
     const okUsuario = validarCampoUsuario();

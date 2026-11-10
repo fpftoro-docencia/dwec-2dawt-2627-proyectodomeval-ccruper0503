@@ -71,7 +71,9 @@ function renderizarAlerta(mensaje, tipo, contenedor) {
  */
 export function iniciarAvisos(documento = document, almacen = sessionStorage) {
   const contenedor = documento.getElementById('contenedor-avisos');
-  if (!contenedor) return;
+  if (!contenedor) {
+    return;
+  }
 
   // 1. Mostrar aviso pendiente si lo hubiere
   try {

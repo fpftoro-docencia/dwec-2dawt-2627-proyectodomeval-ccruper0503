@@ -22,7 +22,9 @@ export const ROL_USUARIO = 'usuario';
 export function obtenerUsuarios(almacen = localStorage) {
   try {
     const raw = almacen.getItem(CLAVE_ALMACEN_USUARIOS);
-    if (!raw) return [];
+    if (!raw) {
+      return [];
+    }
     const datos = JSON.parse(raw);
     return Array.isArray(datos) ? datos : [];
   } catch {
@@ -48,7 +50,9 @@ export function guardarUsuarios(usuarios, almacen = localStorage) {
  * @returns {Object|null} El usuario encontrado o null si no existe.
  */
 export function buscarUsuarioPorNombre(nombreUsuario, almacen = localStorage) {
-  if (!nombreUsuario) return null;
+  if (!nombreUsuario) {
+    return null;
+  }
   const lista = obtenerUsuarios(almacen);
   const busqueda = nombreUsuario.trim().toLowerCase();
   return lista.find((u) => u.nombreUsuario.toLowerCase() === busqueda) || null;
@@ -116,7 +120,9 @@ export async function registrarUsuario({ nombreUsuario, correo, clave }, almacen
  * @returns {Promise<Object|null>} El usuario autenticado (sin su hash) o null si falla.
  */
 export async function verificarCredenciales(identificador, clave, almacen = localStorage) {
-  if (!identificador || !clave) return null;
+  if (!identificador || !clave) {
+    return null;
+  }
 
   const usuarios = obtenerUsuarios(almacen);
   const idLimpio = identificador.trim().toLowerCase();
@@ -125,7 +131,9 @@ export async function verificarCredenciales(identificador, clave, almacen = loca
     (u) => u.nombreUsuario.toLowerCase() === idLimpio || u.correo.toLowerCase() === idLimpio,
   );
 
-  if (!usuario) return null;
+  if (!usuario) {
+    return null;
+  }
 
   const hashClave = await resumirClave(clave);
   if (hashClave === usuario.clave) {
