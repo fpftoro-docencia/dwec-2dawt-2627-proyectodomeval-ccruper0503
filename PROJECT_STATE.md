@@ -137,6 +137,7 @@
 - [x] **S1-09: Tests unitarios de usuarios, sesión y validadores** — (10/11/2026) — Consolidación de la suite con `tests/unitarios/registro.test.js` (74 tests unitarios e integración en verde). PR #8.
 - [x] **S1-10: Workflow de GitHub Actions (Paso 1)** — (10/11/2026) — Creación de `.github/workflows/ci.yml` con trabajos encadenados `Calidad` y `Tests` en `ubuntu-latest`. PR #9.
 - [x] **S1-11: Entrada del blog y cierre del Sprint 1 (v0.1)** — (10/11/2026) — Redacción de `blog/README.md`, reflexión final en `README.md`, creación y push del tag `v0.1`. PR #10.
+- [x] **Post-S1: Dinamización de vistas y registro continuo** — (11/11/2026) — Limpieza de datos estáticos en `listado.html` y `usuarios.html`, creación de controladores `listado.js` y `usuarios.js`, y habilitación de registro continuo para administradores. PR #11.
 
 ---
 
