@@ -158,16 +158,16 @@ Durante la implementación de la autenticación asíncrona con la Web Crypto API
 
 ### El workflow
 
-<!-- Sprints 1 y 2. Qué hace ci.yml: cuándo se ejecuta, la tabla de sus trabajos y por qué están en
-     ese orden, qué artefactos sube y para qué sirven, y qué hace concurrency. -->
+El flujo de integración continua está configurado en `.github/workflows/ci.yml`. Se ejecuta automáticamente ante cada `push` y en cada `pull_request` dirigido a la rama `main`, garantizando que ningún código roto o con estilo no conforme entre en el tronco principal. Cuenta con permisos restringidos de solo lectura (`permissions: contents: read`).
 
 | Trabajo | Espera a | Pasos | Artefacto |
 |---------|----------|-------|-----------|
-| `Calidad` | — | | — |
-| `Tests` | | | |
-| `E2E` | | | |
+| `Calidad` | — | 1. Checkout del repositorio (`actions/checkout@v4`).<br>2. Configuración de Node.js 24 con caché npm (`actions/setup-node@v4`).<br>3. Instalación limpia (`npm ci`).<br>4. Verificación de reglas de ESLint (`npm run lint`).<br>5. Verificación de formateo con Prettier (`npm run format:check`). | — |
+| `Tests` | `Calidad` | 1. Checkout del código.<br>2. Configuración de Node.js 24 y caché npm.<br>3. Instalación de dependencias (`npm ci`).<br>4. Ejecución de suite de pruebas unitarias e integración con Vitest (`npm test`). | — *(Sprint 2)* |
+| `E2E` *(Sprint 2)* | `Tests` | Pruebas de extremo a extremo con Playwright. | `playwright-report/` *(si falla)* |
 
-**Ejecución en verde con sus artefactos:** <!-- enlace -->
+**¿Por qué están en este orden?**  
+El trabajo de `Calidad` es muy rápido y descarta errores sintácticos, variables no utilizadas o incoherencias de estilo en segundos. El trabajo de `Tests` requiere más tiempo y cómputo; al depender de `Calidad` mediante `needs: Calidad`, nos aseguramos de no malgastar minutos de Actions ejecutando pruebas si el código ya contiene fallos básicos de estilo o reglas estáticas incumplidas.
 
 ## Despliegue continuo
 
