@@ -34,7 +34,9 @@ export function iniciarLogin({
   }
 
   const formulario = documento.getElementById('formulario-login');
-  if (!formulario) return;
+  if (!formulario) {
+    return;
+  }
 
   const campoUsuario = documento.getElementById('nombre-usuario');
   const campoClave = documento.getElementById('clave');
@@ -68,7 +70,9 @@ export function iniciarLogin({
 
     if (!nombreUsuario) {
       campoUsuario?.classList.add('is-invalid');
-      if (!hayError) campoUsuario?.focus();
+      if (!hayError) {
+        campoUsuario?.focus();
+      }
       hayError = true;
     } else {
       campoUsuario?.classList.remove('is-invalid');
@@ -76,7 +80,9 @@ export function iniciarLogin({
 
     if (!clave) {
       campoClave?.classList.add('is-invalid');
-      if (!hayError) campoClave?.focus();
+      if (!hayError) {
+        campoClave?.focus();
+      }
       hayError = true;
     } else {
       campoClave?.classList.remove('is-invalid');

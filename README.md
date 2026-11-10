@@ -123,9 +123,38 @@ SportLog es una aplicación web para deportistas que permite registrar, planific
 
 ### ESLint y Prettier
 
-<!-- Sprint 1. Las reglas que has añadido a eslint.config.js (al menos tres): qué comprueba cada una
-     y por qué la quieres. Pega la salida de `npm run lint` y de `npm run format:check`. Cuenta un
-     problema real que encontraras con el depurador de las DevTools y cómo lo resolviste. -->
+Para asegurar la máxima calidad de código, coherencia de estilo y prevención temprana de defectos, se han añadido tres reglas adicionales a la configuración plana de `eslint.config.js`:
+
+1. **`camelcase` (`'error'`):**
+   - **Qué comprueba:** Obliga a que todos los identificadores de variables, funciones y propiedades sigan la convención `camelCase` estándar de JavaScript.
+   - **Por qué la queremos:** Evita mezclas de convenciones (`snake_case` o `PascalCase` inadecuados) y mantiene una nomenclatura homogénea y profesional en todo el repositorio.
+
+2. **`curly` (`'error'`):**
+   - **Qué comprueba:** Exige el uso explícito de llaves `{ ... }` en todas las estructuras de control (`if`, `else`, `for`, `while`), prohibiendo sentencias condicionales de una sola línea sin llaves.
+   - **Por qué la queremos:** Previene errores de lógica graves provocados por añadir sentencias posteriores pensando que forman parte del bloque condicional cuando en realidad quedan fuera.
+
+3. **`no-console` (`['error', { allow: ['warn', 'error'] }]`):**
+   - **Qué comprueba:** Prohíbe el uso de `console.log` en el código fuente de la aplicación, permitiendo únicamente `console.warn` y `console.error` para situaciones anómalas justificadas. Además, se define una excepción en la configuración para ficheros de utilidades de construcción (`scripts/**/*.js`).
+   - **Por qué la queremos:** Asegura que no queden llamadas residuales de depuración en producción que ensucien la consola del navegador del usuario o expongan información interna.
+
+#### Salida de verificación de ESLint (`npm run lint`):
+```text
+> mi-aplicacion@1.0.0 lint
+> eslint .
+```
+
+#### Salida de comprobación de estilo con Prettier (`npm run format:check`):
+```text
+> mi-aplicacion@1.0.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+```
+
+#### Problema real identificado y resuelto con el depurador de las DevTools:
+Durante la implementación de la autenticación asíncrona con la Web Crypto API (`crypto.subtle.digest`), al probar el envío del formulario con el teclado (pulsaciones rápidas de `Enter`), descubrimos en la pestaña **Sources** y **Event Listener Breakpoints** de las DevTools que el evento `submit` se disparaba repetidamente antes de completarse el hashing de la contraseña. Esto provocaba ejecuciones concurrentes de `verificarCredenciales` e intentos de doble inserción en el almacenamiento.  
+**Solución aplicada:** Se introdujo una bandera de control de estado en el ciclo de vida del formulario (`let enviando = false;`) y la desactivación inmediata del botón (`botonLogin.disabled = true;`), ignorando cualquier envío concurrente hasta que la promesa criptográfica se resuelva.
 
 ### El workflow
 

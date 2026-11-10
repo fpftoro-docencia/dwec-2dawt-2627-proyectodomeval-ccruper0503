@@ -21,7 +21,9 @@ export const ROL_USUARIO = 'usuario';
 export function obtenerSesion(almacen = sessionStorage) {
   try {
     const raw = almacen.getItem(CLAVE_ALMACEN_SESION);
-    if (!raw) return null;
+    if (!raw) {
+      return null;
+    }
     const sesion = JSON.parse(raw);
     if (sesion && typeof sesion === 'object' && sesion.nombreUsuario && sesion.rol) {
       return sesion;
@@ -142,7 +144,9 @@ export function configurarCabeceraPrivada(
   navegar = (url) => location.replace(url),
 ) {
   const sesion = obtenerSesion(almacen);
-  if (!sesion) return;
+  if (!sesion) {
+    return;
+  }
 
   const elUsuario = documento.getElementById('sesion-usuario');
   const elRol = documento.getElementById('sesion-rol');
@@ -150,8 +154,12 @@ export function configurarCabeceraPrivada(
   const elMenuUsuarios = documento.getElementById('menu-usuarios');
   const botonCerrar = documento.getElementById('btn-cerrar-sesion');
 
-  if (elUsuario) elUsuario.textContent = sesion.nombreUsuario;
-  if (elRol) elRol.textContent = sesion.rol;
+  if (elUsuario) {
+    elUsuario.textContent = sesion.nombreUsuario;
+  }
+  if (elRol) {
+    elRol.textContent = sesion.rol;
+  }
   if (elAvatar) {
     elAvatar.textContent = sesion.nombreUsuario.charAt(0).toUpperCase();
   }
