@@ -1,7 +1,6 @@
-# Nombre de tu aplicación
+# SportLog · Diario de Entrenamientos
 
-<!-- Sprint 2: la insignia de tu workflow, con tu organización y tu repositorio. -->
-![Integración continua](https://github.com/<organización>/<repositorio>/actions/workflows/ci.yml/badge.svg)
+![Integración continua](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/actions/workflows/ci.yml/badge.svg)
 
 <!-- Completa cada sección a medida que avanzas en los sprints. Borra los comentarios como este
      cuando termines. Este README es también la portada de la documentación que genera `npm run docs`.
@@ -192,41 +191,43 @@ El trabajo de `Calidad` es muy rápido y descarta errores sintácticos, variable
 
 ### Definición de Hecho
 
-<!-- Sprint 1. Tu lista de condiciones para dar una tarea por terminada. Cada una tiene que poder
-     comprobarse. Si la cambias en algún sprint, di qué cambiaste y por qué. -->
-
 Para dar una tarea por terminada en el tablero y poder fusionar su rama a main:
-- [ ] El código pasa `npm run lint` y `npm run format:check` sin avisos ni errores.
-- [ ] La funcionalidad está probada con tests de Vitest y todos pasan en verde (`npm test`).
-- [ ] No se utilizan librerías de terceros en JavaScript ni APIs remotas.
-- [ ] Se comprueba la seguridad de sesión y los permisos de usuario/administrador.
-- [ ] La Pull Request en GitHub tiene el workflow de integración continua en verde.
+- [x] El código pasa `npm run lint` y `npm run format:check` sin avisos ni errores.
+- [x] La funcionalidad está probada con tests de Vitest y todos pasan en verde (`npm test`).
+- [x] No se utilizan librerías de terceros en JavaScript ni APIs remotas.
+- [x] Se comprueba la seguridad de sesión y los permisos de usuario/administrador.
+- [x] La Pull Request en GitHub tiene el workflow de integración continua en verde.
 
 ### Sprints
 
-<!-- Una fila por sprint. La reflexión: qué salió bien, qué no, qué cambias para el siguiente
-     (cuatro o cinco líneas, sobre tu trabajo y no sobre el enunciado). -->
-
 | Sprint | *Tag* | Qué incluye | Reflexión |
 |--------|-------|-------------|-----------|
-| 1 | `v0.1` | | |
-| 2 | `v0.2` | | |
-| 3 | `v1.0` | | |
+| 1 | `v0.1` | Gestión de usuarios en `localStorage`, roles (`administrador` para el primer usuario), resumen SHA-256 (`js/clave.js`), control de sesión en `sessionStorage`, avisos por `CustomEvent`, formularios de registro y login con validaciones en tiempo real y anti-doble envío, suite de 74 tests unitarios y workflow de CI (Calidad + Tests). | La modularización en ES Modules con inyección de dependencias (`AlmacenFalso`) ha permitido alcanzar más de un 90% de cobertura sin tocar el navegador. Fue clave entender el asincronismo de la Web Crypto API y resolver las condiciones de carrera con banderas de estado en el formulario. Para el Sprint 2 planificaremos con mayor antelación el modelado de la entidad y la paginación. |
+| 2 | `v0.2` | El CRUD y la zona de administración, con todas sus pruebas y la integración continua completa. | *(Pendiente)* |
+| 3 | `v1.0` | Despliegue en producción con Vercel, pruebas de extremo a extremo con Playwright y entrega final. | *(Pendiente)* |
 
-**Tablero de Trello:** <!-- enlace (compartido con el profesor) -->
+**Tablero de Trello:**
 https://trello.com/invite/b/6aec9ce9063c16b7c0047ea8/ATTI178831c6a60f25f26ec0e00a2054500d26E02A60/dwec-sportlog
 
-**Blog del proyecto:** [blog/README.md](blog/README.md) <!-- dificultades y problemas conceptuales de cada sprint -->
+**Blog del proyecto:** [blog/README.md](blog/README.md)
 
 ### Ramas y versiones
 
-<!-- 1. Tabla con tus ramas: nombre, qué funcionalidad y enlace a su pull request.
-     2. Si integras con merge o con rebase, y por qué.
-     3. Qué deja fuera tu .gitignore y por qué. -->
+Cada funcionalidad se desarrolla en una rama independiente y se integra en `main` exclusivamente mediante **Pull Request con Merge Commit**. Se utiliza merge commit en lugar de rebase o squash porque preserva la historia fidedigna del proyecto, vincula cada cambio con su revisión en GitHub y asocia los informes de ejecución de GitHub Actions a cada commit de integración de forma inmutable.
+
+El archivo `.gitignore` excluye `node_modules/`, `dist/`, `docs/`, `coverage/`, `playwright-report/`, `test-results/` y archivos propios del sistema operativo (`.DS_Store`, `Thumbs.db`), ya que son dependencias instalables o artefactos compilados/generados automáticamente que no deben contaminar el control de versiones.
 
 | Rama | Funcionalidad | *Pull request* |
 |------|---------------|----------------|
-| `sprint-1-maquetacion` | Maquetación base de las 5 páginas y estilos | [#2](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/2) |
-| `sprint-1-avisos` | Módulo de avisos y CustomEvent | [#3](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/3) |
-| `sprint-1-usuarios` | Módulo de usuarios con hash SHA-256, roles y tests | [#4](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/4) |
-**Versión de entrega:** `v1.0`
+| `sprint-1-documentacion` | Documentación inicial, entidad y tablas | [#1](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/1) |
+| `sprint-1-maquetacion` | Maquetación base de las 5 páginas y estilos Dark Pro | [#2](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/2) |
+| `sprint-1-avisos` | Módulo desacoplado de avisos con CustomEvent | [#3](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/3) |
+| `sprint-1-usuarios` | Módulo de usuarios, roles, hash SHA-256 y resiliencia | [#4](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/4) |
+| `sprint-1-registro` | Formulario de Registro interactivo y feedback en vivo | [#5](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/5) |
+| `sprint-1-login` | Formulario de Login, redirecciones y anti-doble envío | [#6](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/6) |
+| `sprint-1-calidad` | Reglas adicionales de ESLint, Prettier y documentación | [#7](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/7) |
+| `sprint-1-tests` | Suite consolidada de tests unitarios (74 tests) | [#8](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/8) |
+| `sprint-1-ci` | Workflow de GitHub Actions (Calidad + Tests) | [#9](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/9) |
+| `sprint-1-cierre` | Entrada del blog, reflexión y cierre de Sprint 1 | [#10](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/10) |
+
+**Versión de entrega actual:** `v0.1`
