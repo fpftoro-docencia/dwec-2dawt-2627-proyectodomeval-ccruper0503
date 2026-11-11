@@ -44,8 +44,8 @@ describe('Controlador de Registro (S1-06 / S1-09)', () => {
     doc = document;
   });
 
-  it('si ya hay sesión iniciada, redirige directamente a listado.html', () => {
-    iniciarSesion({ nombreUsuario: 'carlos', rol: 'usuario' }, almacenSesion);
+  it('permite acceder al formulario de registro aunque haya sesión iniciada (p. ej. administrador)', () => {
+    iniciarSesion({ nombreUsuario: 'admin', rol: 'administrador' }, almacenSesion);
 
     iniciarRegistro({
       documento: doc,
@@ -54,7 +54,41 @@ describe('Controlador de Registro (S1-06 / S1-09)', () => {
       navegar,
     });
 
-    expect(navegar).toHaveBeenCalledWith('listado.html');
+    expect(navegar).not.toHaveBeenCalled();
+  });
+
+  it('si un administrador registra otro usuario, mantiene la sesión de admin y redirige a usuarios.html', async () => {
+    iniciarSesion({ nombreUsuario: 'admin', rol: 'administrador' }, almacenSesion);
+
+    iniciarRegistro({
+      documento: doc,
+      almacenUsuarios,
+      almacenSesion,
+      navegar,
+    });
+
+    const campoUsuario = doc.getElementById('nombre-usuario');
+    const campoCorreo = doc.getElementById('correo');
+    const campoClave = doc.getElementById('clave');
+    const campoRepetir = doc.getElementById('repetir-clave');
+    const campoTerminos = doc.getElementById('terminos');
+    const form = doc.getElementById('formulario-registro');
+
+    campoUsuario.value = 'nuevo_atleta';
+    campoCorreo.value = 'atleta@sportlog.es';
+    campoClave.value = 'Deporte2026';
+    campoRepetir.value = 'Deporte2026';
+    campoTerminos.checked = true;
+
+    form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(navegar).toHaveBeenCalledWith('usuarios.html');
+
+    const sesion = JSON.parse(almacenSesion.getItem(CLAVE_ALMACEN_SESION));
+    expect(sesion.nombreUsuario).toBe('admin');
+    expect(sesion.rol).toBe('administrador');
   });
 
   it('actualiza dinámicamente las clases de requisitos de contraseña al teclear', () => {

@@ -7,7 +7,7 @@
 
 import { iniciarAvisos, lanzarAviso, guardarAvisoParaSiguientePagina } from '../avisos.js';
 import { existeUsuario, registrarUsuario } from '../usuarios.js';
-import { iniciarSesion, haySesion } from '../sesion.js';
+import { iniciarSesion, obtenerSesion } from '../sesion.js';
 import {
   validarNombreUsuario,
   validarCorreo,
@@ -34,12 +34,6 @@ export function iniciarRegistro({
 } = {}) {
   // Iniciar el sistema de avisos
   iniciarAvisos(documento, almacenSesion);
-
-  // Si ya hay sesión iniciada, redirigir directo al listado
-  if (haySesion(almacenSesion)) {
-    navegar('listado.html');
-    return;
-  }
 
   const formulario = documento.getElementById('formulario-registro');
   if (!formulario) {
@@ -189,18 +183,31 @@ export function iniciarRegistro({
         almacenUsuarios,
       );
 
-      // Iniciar sesión automáticamente
-      iniciarSesion(nuevoUsuario, almacenSesion);
+      const sesionActual = obtenerSesion(almacenSesion);
+      const eraAdmin = sesionActual?.rol === 'administrador';
 
-      // Guardar aviso de bienvenida para la página siguiente
-      guardarAvisoParaSiguientePagina(
-        `¡Bienvenido a SportLog, ${nuevoUsuario.nombreUsuario}! Tu cuenta ha sido creada con éxito.`,
-        'success',
-        almacenSesion,
-      );
+      if (eraAdmin) {
+        // Si un administrador da de alta a otro usuario, mantiene su sesión activa y vuelve a la gestión
+        guardarAvisoParaSiguientePagina(
+          `Nuevo deportista "${nuevoUsuario.nombreUsuario}" registrado con éxito.`,
+          'success',
+          almacenSesion,
+        );
+        navegar('usuarios.html');
+      } else {
+        // Iniciar sesión automáticamente
+        iniciarSesion(nuevoUsuario, almacenSesion);
 
-      // Redirigir al listado de entrenamientos
-      navegar('listado.html');
+        // Guardar aviso de bienvenida para la página siguiente
+        guardarAvisoParaSiguientePagina(
+          `¡Bienvenido a SportLog, ${nuevoUsuario.nombreUsuario}! Tu cuenta ha sido creada con éxito.`,
+          'success',
+          almacenSesion,
+        );
+
+        // Redirigir al listado de entrenamientos
+        navegar('listado.html');
+      }
     } catch (error) {
       enviando = false;
       if (botonRegistro) {
