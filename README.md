@@ -232,5 +232,6 @@ El archivo `.gitignore` excluye `node_modules/`, `dist/`, `docs/`, `coverage/`, 
 | `sprint-2-entidades` | Módulo de datos de entrenamientos y aislamiento por usuario (S2-01) | [#12](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/12) |
 | `sprint-2-validadores` | Validadores de entidad deportiva con regex y tests it.each (S2-02) | [#13](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/13) |
 | `sprint-2-paginacion` | Módulo de paginación pura y sincronización con URL (S2-03) | [#14](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/14) |
+| `sprint-2-ficha-base` | Formulario de ficha con modo alta/edición y campo condicional (S2-04) | [#15](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/15) |
 
 **Versión de entrega actual:** `v0.1`
