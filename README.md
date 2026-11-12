@@ -230,5 +230,6 @@ El archivo `.gitignore` excluye `node_modules/`, `dist/`, `docs/`, `coverage/`, 
 | `sprint-1-ci` | Workflow de GitHub Actions (Calidad + Tests) | [#9](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/9) |
 | `sprint-1-cierre` | Entrada del blog, reflexión y cierre de Sprint 1 | [#10](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/10) |
 | `sprint-2-entidades` | Módulo de datos de entrenamientos y aislamiento por usuario (S2-01) | [#12](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/12) |
+| `sprint-2-validadores` | Validadores de entidad deportiva con regex y tests it.each (S2-02) | [#13](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/13) |
 
 **Versión de entrega actual:** `v0.1`

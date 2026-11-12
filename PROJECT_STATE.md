@@ -139,14 +139,15 @@
 - [x] **S1-11: Entrada del blog y cierre del Sprint 1 (v0.1)** — (10/11/2026) — Redacción de `blog/README.md`, reflexión final en `README.md`, creación y push del tag `v0.1`. PR #10.
 - [x] **Post-S1: Dinamización de vistas y registro continuo** — (11/11/2026) — Limpieza de datos estáticos en `listado.html` y `usuarios.html`, creación de controladores `listado.js` y `usuarios.js`, y habilitación de registro continuo para administradores. PR #11.
 - [x] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — (12/11/2026) — Creación de `js/entrenamientos.js`, aislamiento por usuario con clave `sportlog_entrenamientos_<usuario>`, UUID v4, fechas ISO, CRUD puro, resiliencia a JSON corrupto y 14 tests unitarios en `tests/unitarios/entrenamientos.test.js`. PR #12.
+- [x] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — (12/11/2026) — Creación de `js/validadores-entidad.js` con ritmo de carrera (regex + control lógico de segundos y límites fisiológicos), series/repeticiones, frecuencia cardíaca, mapa `validadoresEntidad` y 52 tests unitarios con `it.each` en `tests/unitarios/validadores-entidad.test.js`. PR #13.
 
 ---
 
 ## 🚧 En Progreso
 
 - [ ] **Sprint 2 (v0.2): CRUD de Entidades, Administración y CI Completa:**
-  - *Estado:* Tarea S2-01 completada e integrada en `main` (PR #12).
-  - *Siguiente paso inmediato:* Comenzar con la tarea `S2-02: Validadores de la entidad deportiva con expresiones regulares` en la rama `sprint-2-validadores`.
+  - *Estado:* Tareas S2-01 y S2-02 completadas e integradas en `main` (PR #12 y PR #13).
+  - *Siguiente paso inmediato:* Comenzar con la tarea `S2-03: Módulo de Paginación pura y navegación por URL` en la rama `sprint-2-paginacion`.
 
 ---
 
@@ -154,7 +155,7 @@
 
 ### Must have (Tarjetas planificadas para Sprint 2 · v0.2)
 - [x] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — Prioridad: Alta — Dep: S1-04, S1-05 (Completado en PR #12)
-- [ ] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — Prioridad: Alta — Dep: Ninguna
+- [x] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — Prioridad: Alta — Dep: Ninguna (Completado en PR #13)
 - [ ] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna
 - [ ] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02
 - [ ] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios** — Prioridad: Alta — Dep: S2-04
