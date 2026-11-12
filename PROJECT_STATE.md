@@ -138,21 +138,22 @@
 - [x] **S1-10: Workflow de GitHub Actions (Paso 1)** — (10/11/2026) — Creación de `.github/workflows/ci.yml` con trabajos encadenados `Calidad` y `Tests` en `ubuntu-latest`. PR #9.
 - [x] **S1-11: Entrada del blog y cierre del Sprint 1 (v0.1)** — (10/11/2026) — Redacción de `blog/README.md`, reflexión final en `README.md`, creación y push del tag `v0.1`. PR #10.
 - [x] **Post-S1: Dinamización de vistas y registro continuo** — (11/11/2026) — Limpieza de datos estáticos en `listado.html` y `usuarios.html`, creación de controladores `listado.js` y `usuarios.js`, y habilitación de registro continuo para administradores. PR #11.
+- [x] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — (12/11/2026) — Creación de `js/entrenamientos.js`, aislamiento por usuario con clave `sportlog_entrenamientos_<usuario>`, UUID v4, fechas ISO, CRUD puro, resiliencia a JSON corrupto y 14 tests unitarios en `tests/unitarios/entrenamientos.test.js`. PR #12.
 
 ---
 
 ## 🚧 En Progreso
 
 - [ ] **Sprint 2 (v0.2): CRUD de Entidades, Administración y CI Completa:**
-  - *Estado:* Tarjetas S2-01 a S2-11 generadas y sincronizadas en la columna «Por hacer» de Trello.
-  - *Siguiente paso inmediato:* Comenzar con la tarea `S2-01: Módulo de datos de Entidades y almacenamiento por usuario` en la rama `sprint-2-entidades`.
+  - *Estado:* Tarea S2-01 completada e integrada en `main` (PR #12).
+  - *Siguiente paso inmediato:* Comenzar con la tarea `S2-02: Validadores de la entidad deportiva con expresiones regulares` en la rama `sprint-2-validadores`.
 
 ---
 
 ## 📌 Pendiente (Backlog)
 
 ### Must have (Tarjetas planificadas para Sprint 2 · v0.2)
-- [ ] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — Prioridad: Alta — Dep: S1-04, S1-05
+- [x] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — Prioridad: Alta — Dep: S1-04, S1-05 (Completado en PR #12)
 - [ ] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — Prioridad: Alta — Dep: Ninguna
 - [ ] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna
 - [ ] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02
