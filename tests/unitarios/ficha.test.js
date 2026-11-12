@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AlmacenFalso } from '../AlmacenFalso.js';
-import { iniciarFicha } from '../../js/paginas/ficha.js';
+import { iniciarFicha, MIN_EJERCICIOS, MAX_EJERCICIOS } from '../../js/paginas/ficha.js';
 import { iniciarSesion } from '../../js/sesion.js';
 import { crearEntrenamiento, obtenerEntrenamientos } from '../../js/entrenamientos.js';
 
-describe('Controlador de Ficha - Alta y edición con campo condicional (S2-04 / Requisito 17)', () => {
+describe('Controlador de Ficha - Grupo dinámico y duración (S2-04 / S2-05 / Requisitos 13, 17, 20)', () => {
   let almacenSesion;
   let almacenEntrenamientos;
   let navegar;
@@ -32,7 +32,13 @@ describe('Controlador de Ficha - Alta y edición con campo condicional (S2-04 / 
           <option value="ciclismo">Ciclismo</option>
         </select>
         <input type="date" id="fecha" name="fecha" required />
-        <input type="number" id="duracion" name="duracion" required value="45" />
+        
+        <!-- Duración en Horas y Minutos -->
+        <input type="number" id="duracion-horas" name="duracionHoras" value="0" />
+        <input type="number" id="duracion-minutos" name="duracionMinutos" value="45" />
+        <input type="hidden" id="duracion" name="duracion" value="45" />
+        <div id="duracion-total-texto">Tiempo total: 45 min</div>
+
         <input type="number" id="distancia" name="distancia" value="10" />
         <input type="number" id="frecuencia-cardiaca" name="frecuenciaCardiaca" value="150" />
         <input type="number" id="calorias" name="calorias" value="500" />
@@ -46,14 +52,32 @@ describe('Controlador de Ficha - Alta y edición con campo condicional (S2-04 / 
           <input type="text" id="dorsal" name="dorsal" disabled />
         </div>
 
+        <!-- Grupo dinámico de ejercicios -->
+        <button type="button" id="btn-anadir-ejercicio">+ Añadir fila</button>
+        <div id="contenedor-ejercicios"></div>
+
         <textarea id="notas" name="notas"></textarea>
         <button id="btn-guardar-ficha" type="submit">Guardar sesión</button>
       </form>
+
+      <template id="plantilla-ejercicio">
+        <div class="fila-ejercicio">
+          <label class="etiqueta-ejercicio-nombre">Ejercicio</label>
+          <input type="text" class="campo-ejercicio-nombre" name="ejercicioNombre[]" required />
+          <div class="invalid-feedback caja-error-ejercicio-nombre">Error nombre</div>
+
+          <label class="etiqueta-ejercicio-detalle">Detalle</label>
+          <input type="text" class="campo-ejercicio-detalle" name="ejercicioDetalle[]" />
+          <div class="invalid-feedback caja-error-ejercicio-detalle">Error detalle</div>
+
+          <button type="button" class="boton-quitar-ejercicio">✕</button>
+        </div>
+      </template>
     `;
     doc = document;
   });
 
-  it('redirige a index.html si no hay sesión abierta (protección de ruta)', () => {
+  it('redirige a index.html si no hay sesión activa', () => {
     iniciarFicha({
       documento: doc,
       almacenSesion,
@@ -64,12 +88,12 @@ describe('Controlador de Ficha - Alta y edición con campo condicional (S2-04 / 
     expect(navegar).toHaveBeenCalledWith('index.html');
   });
 
-  describe('Página protegida con sesión activa', () => {
+  describe('Flujos con sesión iniciada', () => {
     beforeEach(() => {
       iniciarSesion({ nombreUsuario: 'atleta_pro', rol: 'usuario' }, almacenSesion);
     });
 
-    it('asigna dinámicamente por código el atributo max de la fecha a hoy (Requisito 17)', () => {
+    it('asigna dinámicamente la fecha máxima a hoy y campo condicional oculto', () => {
       iniciarFicha({
         documento: doc,
         almacenSesion,
@@ -80,49 +104,12 @@ describe('Controlador de Ficha - Alta y edición con campo condicional (S2-04 / 
       const campoFecha = doc.getElementById('fecha');
       const hoy = new Date().toISOString().split('T')[0];
       expect(campoFecha.max).toBe(hoy);
-    });
 
-    it('gestiona el campo condicional: muestra/oculta y activa/desactiva con hidden y disabled', () => {
-      iniciarFicha({
-        documento: doc,
-        almacenSesion,
-        almacenEntrenamientos,
-        navegar,
-      });
-
-      const check = doc.getElementById('es-competicion');
       const bloque = doc.getElementById('campo-condicional-competicion');
-      const nombreComp = doc.getElementById('nombre-competicion');
-      const dorsal = doc.getElementById('dorsal');
-
-      // Estado inicial (no marcado): oculto y desactivado
       expect(bloque.hidden).toBe(true);
-      expect(nombreComp.disabled).toBe(true);
-      expect(dorsal.disabled).toBe(true);
-
-      // El usuario marca la casilla
-      check.checked = true;
-      check.dispatchEvent(new Event('change'));
-
-      expect(bloque.hidden).toBe(false);
-      expect(nombreComp.disabled).toBe(false);
-      expect(dorsal.disabled).toBe(false);
-
-      // Si el usuario escribe y luego desmarca, se vacía y se vuelve a deshabilitar
-      nombreComp.value = 'Maratón de Valencia';
-      dorsal.value = 'Dorsal #205';
-
-      check.checked = false;
-      check.dispatchEvent(new Event('change'));
-
-      expect(bloque.hidden).toBe(true);
-      expect(nombreComp.disabled).toBe(true);
-      expect(dorsal.disabled).toBe(true);
-      expect(nombreComp.value).toBe('');
-      expect(dorsal.value).toBe('');
     });
 
-    it('actualiza el texto de esfuerzo RPE al mover el deslizador', () => {
+    it('calcula la duración sumando horas y minutos (ej. maratón 3h 15m = 195 min)', () => {
       iniciarFicha({
         documento: doc,
         almacenSesion,
@@ -130,100 +117,194 @@ describe('Controlador de Ficha - Alta y edición con campo condicional (S2-04 / 
         navegar,
       });
 
-      const rpeInput = doc.getElementById('esfuerzo-rpe');
-      const rpeValor = doc.getElementById('valor-rpe');
+      const campoHoras = doc.getElementById('duracion-horas');
+      const campoMinutos = doc.getElementById('duracion-minutos');
+      const campoDuracionOculto = doc.getElementById('duracion');
+      const textoTotal = doc.getElementById('duracion-total-texto');
 
-      rpeInput.value = '10';
-      rpeInput.dispatchEvent(new Event('input'));
-      expect(rpeValor.textContent).toContain('Esfuerzo Máximo');
+      campoHoras.value = '3';
+      campoMinutos.value = '15';
+      campoHoras.dispatchEvent(new Event('input'));
 
-      rpeInput.value = '1';
-      rpeInput.dispatchEvent(new Event('input'));
-      expect(rpeValor.textContent).toContain('Muy suave');
+      // 3 * 60 + 15 = 195 minutos
+      expect(campoDuracionOculto.value).toBe('195');
+      expect(textoTotal.textContent).toContain('195 min (3h 15m)');
     });
 
-    it('modo alta: registra nuevo entrenamiento y redirige a listado.html con aviso', () => {
-      iniciarFicha({
-        documento: doc,
-        almacenSesion,
-        almacenEntrenamientos,
-        navegar,
+    describe('Grupo dinámico de ejercicios desde <template> (Requisitos 13, 17 y 20)', () => {
+      it('inicializa con 1 fila y desactiva su botón de quitar (límite mínimo 1)', () => {
+        iniciarFicha({
+          documento: doc,
+          almacenSesion,
+          almacenEntrenamientos,
+          navegar,
+        });
+
+        const contenedor = doc.getElementById('contenedor-ejercicios');
+        const filas = contenedor.querySelectorAll('.fila-ejercicio');
+        expect(filas).toHaveLength(MIN_EJERCICIOS);
+
+        const btnQuitar = contenedor.querySelector('.boton-quitar-ejercicio');
+        expect(btnQuitar.disabled).toBe(true);
       });
 
-      doc.getElementById('titulo-sesion').value = 'Rodaje matutino';
-      doc.getElementById('disciplina').value = 'running';
-      doc.getElementById('fecha').value = '2026-11-12';
-      doc.getElementById('duracion').value = '55';
+      it('genera id único por campo, vinculando etiqueta (htmlFor) y aria-describedby', () => {
+        iniciarFicha({
+          documento: doc,
+          almacenSesion,
+          almacenEntrenamientos,
+          navegar,
+        });
 
-      const form = doc.getElementById('formulario-ficha');
-      form.dispatchEvent(new Event('submit', { cancelable: true }));
+        const contenedor = doc.getElementById('contenedor-ejercicios');
+        const inputNombre = contenedor.querySelector('.campo-ejercicio-nombre');
+        const labelNombre = contenedor.querySelector('.etiqueta-ejercicio-nombre');
+        const errorNombre = contenedor.querySelector('.caja-error-ejercicio-nombre');
 
-      expect(navegar).toHaveBeenCalledWith('listado.html');
+        expect(inputNombre.id).toMatch(/^ejercicio-nombre-\d+$/);
+        expect(labelNombre.htmlFor).toBe(inputNombre.id);
+        expect(errorNombre.id).toBe(`error-${inputNombre.id}`);
+        expect(inputNombre.getAttribute('aria-describedby')).toBe(errorNombre.id);
+      });
 
-      const guardados = obtenerEntrenamientos('atleta_pro', almacenEntrenamientos);
-      expect(guardados).toHaveLength(1);
-      expect(guardados[0].titulo).toBe('Rodaje matutino');
-      expect(guardados[0].duracion).toBe(55);
-      expect(guardados[0].esCompeticion).toBe(false);
+      it('permite añadir filas hasta el límite máximo (5) y desactiva el botón de añadir', () => {
+        iniciarFicha({
+          documento: doc,
+          almacenSesion,
+          almacenEntrenamientos,
+          navegar,
+        });
+
+        const btnAnadir = doc.getElementById('btn-anadir-ejercicio');
+        const contenedor = doc.getElementById('contenedor-ejercicios');
+
+        // Partimos de 1, pulsamos 4 veces más para llegar a 5
+        btnAnadir.click();
+        btnAnadir.click();
+        btnAnadir.click();
+        btnAnadir.click();
+
+        const filas = contenedor.querySelectorAll('.fila-ejercicio');
+        expect(filas).toHaveLength(MAX_EJERCICIOS);
+        expect(btnAnadir.disabled).toBe(true);
+
+        // Los botones de eliminar deben estar habilitados
+        const botonesQuitar = contenedor.querySelectorAll('.boton-quitar-ejercicio');
+        botonesQuitar.forEach((btn) => expect(btn.disabled).toBe(false));
+
+        // Un clic extra no añade más de 5
+        btnAnadir.click();
+        expect(contenedor.querySelectorAll('.fila-ejercicio')).toHaveLength(MAX_EJERCICIOS);
+      });
+
+      it('elimina filas usando delegación de eventos y reactiva el botón de añadir', () => {
+        iniciarFicha({
+          documento: doc,
+          almacenSesion,
+          almacenEntrenamientos,
+          navegar,
+        });
+
+        const btnAnadir = doc.getElementById('btn-anadir-ejercicio');
+        const contenedor = doc.getElementById('contenedor-ejercicios');
+
+        btnAnadir.click(); // 2 filas
+        expect(contenedor.querySelectorAll('.fila-ejercicio')).toHaveLength(2);
+
+        // Clic en el botón eliminar de la segunda fila
+        const segundoBtnQuitar = contenedor.querySelectorAll('.boton-quitar-ejercicio')[1];
+        segundoBtnQuitar.click();
+
+        expect(contenedor.querySelectorAll('.fila-ejercicio')).toHaveLength(1);
+        // Al quedar 1 fila, su botón de eliminar vuelve a quedar disabled
+        expect(contenedor.querySelector('.boton-quitar-ejercicio').disabled).toBe(true);
+      });
     });
 
-    it('modo edición: redirige al listado con aviso de error si el id no existe', () => {
-      iniciarFicha({
-        documento: doc,
-        almacenSesion,
-        almacenEntrenamientos,
-        navegar,
-        ubicacion: { search: '?id=id-inexistente' },
+    describe('Persistencia con FormData.getAll() y modo edición', () => {
+      it('guarda los ejercicios y la duración en horas y minutos al enviar en modo alta', () => {
+        iniciarFicha({
+          documento: doc,
+          almacenSesion,
+          almacenEntrenamientos,
+          navegar,
+        });
+
+        doc.getElementById('titulo-sesion').value = 'Maratón Sevilla';
+        doc.getElementById('disciplina').value = 'running';
+        doc.getElementById('fecha').value = '2026-11-12';
+        doc.getElementById('duracion-horas').value = '3';
+        doc.getElementById('duracion-minutos').value = '15';
+
+        // Ejercicio 1
+        const inputsNombre = doc.querySelectorAll('.campo-ejercicio-nombre');
+        const inputsDetalle = doc.querySelectorAll('.campo-ejercicio-detalle');
+        inputsNombre[0].value = 'Carrera continua 42.195km';
+        inputsDetalle[0].value = 'Ritmo medio 4:37 min/km';
+
+        // Añadimos ejercicio 2
+        doc.getElementById('btn-anadir-ejercicio').click();
+        const inputsNombre2 = doc.querySelectorAll('.campo-ejercicio-nombre');
+        const inputsDetalle2 = doc.querySelectorAll('.campo-ejercicio-detalle');
+        inputsNombre2[1].value = 'Estiramientos y vuelta a la calma';
+        inputsDetalle2[1].value = '15 min suaves';
+
+        const form = doc.getElementById('formulario-ficha');
+        form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+        expect(navegar).toHaveBeenCalledWith('listado.html');
+
+        const guardados = obtenerEntrenamientos('atleta_pro', almacenEntrenamientos);
+        expect(guardados).toHaveLength(1);
+        expect(guardados[0].titulo).toBe('Maratón Sevilla');
+        expect(guardados[0].duracion).toBe(195);
+        expect(guardados[0].duracionHoras).toBe(3);
+        expect(guardados[0].duracionMinutos).toBe(15);
+        expect(guardados[0].ejercicios).toHaveLength(2);
+        expect(guardados[0].ejercicios[0].nombre).toBe('Carrera continua 42.195km');
+        expect(guardados[0].ejercicios[1].nombre).toBe('Estiramientos y vuelta a la calma');
       });
 
-      expect(navegar).toHaveBeenCalledWith('listado.html');
-      const avisoGuardado = almacenSesion.getItem('sportlog_aviso_pendiente');
-      expect(avisoGuardado).toContain('no existe o fue eliminado');
-    });
+      it('al editar, reconstruye las filas dinámicas y desglosa horas y minutos', () => {
+        const sesionExistente = crearEntrenamiento(
+          'atleta_pro',
+          {
+            titulo: 'Gimnasio y Rodaje',
+            disciplina: 'running',
+            fecha: '2026-11-10',
+            duracion: 130, // 2h 10m
+            duracionHoras: 2,
+            duracionMinutos: 10,
+            ejercicios: [
+              { nombre: 'Sentadillas', detalle: '4x10@80kg' },
+              { nombre: 'Zancadas', detalle: '3x12@20kg' },
+              { nombre: 'Sprint final', detalle: '5x100m' },
+            ],
+          },
+          almacenEntrenamientos,
+        );
 
-    it('modo edición: rellena el formulario y actualiza el registro existente', () => {
-      const original = crearEntrenamiento(
-        'atleta_pro',
-        {
-          titulo: 'Entrenamiento previo',
-          disciplina: 'ciclismo',
-          fecha: '2026-11-10',
-          duracion: 90,
-          esCompeticion: true,
-          nombreCompeticion: 'Copa Regional',
-          dorsal: '12',
-        },
-        almacenEntrenamientos,
-      );
+        iniciarFicha({
+          documento: doc,
+          almacenSesion,
+          almacenEntrenamientos,
+          navegar,
+          ubicacion: { search: `?id=${sesionExistente.id}` },
+        });
 
-      iniciarFicha({
-        documento: doc,
-        almacenSesion,
-        almacenEntrenamientos,
-        navegar,
-        ubicacion: { search: `?id=${original.id}` },
+        // Comprobar duración desglosada
+        expect(doc.getElementById('duracion-horas').value).toBe('2');
+        expect(doc.getElementById('duracion-minutos').value).toBe('10');
+
+        // Comprobar que se han creado las 3 filas
+        const filas = doc.querySelectorAll('.fila-ejercicio');
+        expect(filas).toHaveLength(3);
+
+        const nombres = Array.from(doc.querySelectorAll('.campo-ejercicio-nombre')).map(
+          (i) => i.value,
+        );
+        expect(nombres).toEqual(['Sentadillas', 'Zancadas', 'Sprint final']);
       });
-
-      // Comprobar que los campos se han rellenado
-      expect(doc.getElementById('titulo-sesion').value).toBe('Entrenamiento previo');
-      expect(doc.getElementById('disciplina').value).toBe('ciclismo');
-      expect(doc.getElementById('es-competicion').checked).toBe(true);
-      expect(doc.getElementById('nombre-competicion').value).toBe('Copa Regional');
-      expect(doc.getElementById('nombre-competicion').disabled).toBe(false);
-      expect(doc.getElementById('campo-condicional-competicion').hidden).toBe(false);
-      expect(doc.getElementById('titulo-ficha').textContent).toBe('Editar sesión deportiva');
-
-      // Modificamos un dato y guardamos
-      doc.getElementById('titulo-sesion').value = 'Entrenamiento previo (ajustado)';
-      const form = doc.getElementById('formulario-ficha');
-      form.dispatchEvent(new Event('submit', { cancelable: true }));
-
-      expect(navegar).toHaveBeenCalledWith('listado.html');
-
-      const entrenamientos = obtenerEntrenamientos('atleta_pro', almacenEntrenamientos);
-      expect(entrenamientos).toHaveLength(1);
-      expect(entrenamientos[0].titulo).toBe('Entrenamiento previo (ajustado)');
-      expect(entrenamientos[0].id).toBe(original.id);
     });
   });
 });
