@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportLog · Iniciar sesión</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="pagina-acceso">
+      <!-- Panel Lateral Hero Atleta -->
+      <aside class="acceso-lateral" aria-hidden="true">
+        <div class="d-flex align-items-center justify-content-between">
+          <a href="index.html" class="marca">
+            <span class="marca-icono">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 12h4l3-8 4 16 3-8h4" />
+              </svg>
+            </span>
+            <span>SportLog<span class="marca-punto">.</span></span>
+          </a>
+          <span class="badge-destacado">v1.0 Pro Edition</span>
+        </div>
+
+        <div class="acceso-lateral-contenido my-auto py-4">
+          <span class="badge-destacado mb-3">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            Control Integral de Rendimiento
+          </span>
+          <h2 class="display-6 fw-bold">
+            Entrena con cabeza.<br />
+            Mejora con datos reales.
+          </h2>
+          <p class="descripcion">
+            Tu diario deportivo de nueva generación: registra disciplinas, analiza ritmos de
+            carrera, series de fuerza y mantén tu historial 100% privado en tu navegador.
+          </p>
+
+          <!-- Tarjeta HUD de Telemetría Atleta Interactiva (Visual) -->
+          <div class="hud-preview-card">
+            <div class="hud-header">
+              <div class="hud-atleta">
+                <div class="hud-avatar">CR</div>
+                <div>
+                  <div class="fw-bold text-white small">Christian R. · Running 10K</div>
+                  <div class="text-secondary small" style="font-size: 0.72rem">
+                    Sesión matinal completada · Hoy 07:30h
+                  </div>
+                </div>
+              </div>
+              <div class="hud-live-tag">
+                <span class="hud-live-punto"></span>
+                Óptimo
+              </div>
+            </div>
+
+            <!-- Mini Gráfica SVG de Ritmo / Frecuencia -->
+            <div class="my-2" style="height: 48px">
+              <svg viewBox="0 0 320 48" style="width: 100%; height: 100%; overflow: visible">
+                <defs>
+                  <linearGradient id="gradiente-pulso" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ff5722" stop-opacity="0.45" />
+                    <stop offset="100%" stop-color="#ff5722" stop-opacity="0.0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M0 38 Q 40 32, 70 20 T 140 24 T 210 12 T 270 18 T 320 6 L 320 48 L 0 48 Z"
+                  fill="url(#gradiente-pulso)"
+                />
+                <path
+                  d="M0 38 Q 40 32, 70 20 T 140 24 T 210 12 T 270 18 T 320 6"
+                  fill="none"
+                  stroke="#ff5722"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+                <circle cx="320" cy="6" r="3.5" fill="#ff8a50" />
+              </svg>
+            </div>
+
+            <div class="hud-metricas">
+              <div class="hud-metrica-item">
+                <span class="hud-metrica-label">Ritmo Medio</span>
+                <span class="hud-metrica-valor"
+                  >3:42 <small style="font-size: 0.65rem">min/km</small></span
+                >
+              </div>
+              <div class="hud-metrica-item">
+                <span class="hud-metrica-label">Pulso Medio</span>
+                <span class="hud-metrica-valor"
+                  >164 <small style="font-size: 0.65rem">bpm</small></span
+                >
+              </div>
+              <div class="hud-metrica-item">
+                <span class="hud-metrica-label">Gasto Calórico</span>
+                <span class="hud-metrica-valor"
+                  >620 <small style="font-size: 0.65rem">kcal</small></span
+                >
+              </div>
+            </div>
+          </div>
+
+          <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+            <li class="d-flex align-items-center gap-2 text-secondary small">
+              <span class="text-success">✓</span> Registra cada sesión: disciplina, duración, cargas
+              y ejercicios
+            </li>
+            <li class="d-flex align-items-center gap-2 text-secondary small">
+              <span class="text-success">✓</span> Historial completo con filtros, buscador y
+              paginación rápida
+            </li>
+            <li class="d-flex align-items-center gap-2 text-secondary small">
+              <span class="text-success">✓</span> Privacidad total: tus marcas nunca salen de tu
+              dispositivo
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-10 small text-secondary"
+        >
+          <span>© SportLog · DWEC DAWT</span>
+          <span>Arquitectura Segura Client-First</span>
+        </div>
+      </aside>
+
+      <!-- Panel Principal de Acceso (Formulario) -->
+      <main class="acceso-principal">
+        <div class="acceso-caja">
+          <!-- Región accesible de avisos -->
+          <div
+            id="contenedor-avisos"
+            class="region-avisos mb-3"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+          <div class="text-center mb-4">
+            <div
+              class="marca-icono mx-auto mb-3"
+              style="width: 3rem; height: 3rem; border-radius: 1rem"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                style="width: 1.6rem; height: 1.6rem"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <h1 class="h3 fw-bold mb-1 text-white">Bienvenido de nuevo</h1>
+            <p class="text-secondary small mb-0">
+              Inicia sesión para acceder a tu historial de entrenamientos.
+            </p>
+          </div>
+
+          <div class="caja-pista d-flex align-items-center gap-2">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#f59e0b"
+              stroke-width="2"
+              class="flex-shrink-0"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <div>
+              <strong>Acceso rápido:</strong> Si aún no has registrado usuarios, el primero será
+              <strong>Administrador</strong>.
+            </div>
+          </div>
+
+          <form id="formulario-login" novalidate>
+            <div class="mb-3">
+              <label for="nombre-usuario" class="form-label">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                Usuario o Correo
+              </label>
+              <div class="input-con-icono">
+                <span class="icono-input">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nombre-usuario"
+                  name="nombreUsuario"
+                  autocomplete="username"
+                  placeholder="ej. atleta_pro o admin"
+                  required
+                />
+              </div>
+              <div class="invalid-feedback">Introduce tu nombre de usuario.</div>
+            </div>
+
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="clave" class="form-label mb-0">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  Contraseña
+                </label>
+              </div>
+              <div class="input-con-icono">
+                <span class="icono-input">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </span>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="clave"
+                  name="clave"
+                  autocomplete="current-password"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <div class="invalid-feedback">Introduce tu contraseña.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 btn-brillo py-3 fs-6" id="btn-login">
+              Entrar al panel deportivo
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+          </form>
+
+          <p class="text-center text-secondary mt-4 mb-0 small">
+            ¿Aún no tienes cuenta?
+            <a href="registro.html" class="fw-bold text-white text-decoration-underline ms-1">
+              Crear cuenta gratis
+            </a>
+          </p>
+
+          <div
+            class="text-center mt-4 pt-3 border-top border-secondary border-opacity-10 text-secondary"
+            style="font-size: 0.75rem"
+          >
+            🔒 Resumen criptográfico SHA-256 local · Máxima privacidad
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="js/paginas/login.js"></script>
+  </body>
+</html>

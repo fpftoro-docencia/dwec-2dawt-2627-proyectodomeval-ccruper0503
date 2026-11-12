@@ -15,6 +15,15 @@ export default [
       'no-var': 'error',
       'prefer-const': 'error',
       eqeqeq: 'error',
+      camelcase: 'error',
+      curly: 'error',
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+    },
+  },
+  {
+    files: ['scripts/**/*.js'],
+    rules: {
+      'no-console': 'off',
     },
   },
 ];
