@@ -142,14 +142,15 @@
 - [x] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — (12/11/2026) — Creación de `js/validadores-entidad.js` con ritmo de carrera (regex + control lógico de segundos y límites fisiológicos), series/repeticiones, frecuencia cardíaca, mapa `validadoresEntidad` y 52 tests unitarios con `it.each` en `tests/unitarios/validadores-entidad.test.js`. PR #13.
 - [x] **S2-03: Módulo de Paginación pura y navegación por URL** — (12/11/2026) — Creación de `js/paginacion.js` con función pura `paginar`, corrección de límites, generación de controles accesibles, delegación de eventos (`closest`) y sincronización en URL con `URLSearchParams` y `history.replaceState`. 15 tests unitarios en `tests/unitarios/paginacion.test.js`. PR #14.
 - [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — (12/11/2026) — Implementación de `js/paginas/ficha.js` y conexión en `ficha.html`. Modo alta vs edición (`?id=...`), campo condicional interactivo con `hidden` y `disabled`, fecha máxima de hoy por código, lectura con `FormData` y redirección con aviso. 7 tests unitarios en `tests/unitarios/ficha.test.js`. PR #15.
+- [x] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios y duración horas/minutos** — (12/11/2026) — Plantilla `<template id="plantilla-ejercicio">` con límites de 1 a 5 ejercicios, botones interactivos desactivados en extremos, IDs dinámicos y enlaces de accesibilidad (`htmlFor`, `aria-describedby`), extracción con `FormData.getAll()`, cálculo matemático automático de horas y minutos a minutos totales (`#duracion`), y 9 tests unitarios en `tests/unitarios/ficha.test.js`. PR #16.
 
 ---
 
 ## 🚧 En Progreso
 
 - [ ] **Sprint 2 (v0.2): CRUD de Entidades, Administración y CI Completa:**
-  - *Estado:* Tareas S2-01, S2-02, S2-03 y S2-04 completadas e integradas en `main` (PR #12, PR #13, PR #14 y PR #15).
-  - *Siguiente paso inmediato:* Comenzar con la tarea `S2-05: Formulario de Ficha - Grupo dinámico de ejercicios` en la rama `sprint-2-ficha-dinamica`.
+  - *Estado:* Tareas S2-01, S2-02, S2-03, S2-04 y S2-05 completadas e integradas en `main` (PRs #12 a #16).
+  - *Siguiente paso inmediato (pendiente de reanudación):* Comenzar con la tarea `S2-06: Sistema de validación en tiempo real en los 3 formularios` (Requisito 19) en la rama `sprint-2-validacion-tiempo-real`.
 
 ---
 
@@ -158,6 +159,15 @@
 ### Must have (Tarjetas planificadas para Sprint 2 · v0.2)
 - [x] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — Prioridad: Alta — Dep: S1-04, S1-05 (Completado en PR #12)
 - [x] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — Prioridad: Alta — Dep: Ninguna (Completado en PR #13)
+- [x] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna (Completado en PR #14)
+- [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02 (Completado en PR #15)
+- [x] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios y duración horas/min** — Prioridad: Alta — Dep: S2-04 (Completado en PR #16)
+- [ ] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — Prioridad: Alta — Dep: S1-06, S1-07, S2-04, S2-05
+- [ ] **S2-07: Listado con buscador con debounce y borrado modal** — Prioridad: Alta — Dep: S2-01, S2-03
+- [ ] **S2-08: Zona de administración de usuarios y roles** — Prioridad: Media — Dep: S1-04, S2-03
+- [ ] **S2-09: Tests de integración de páginas** — Prioridad: Alta — Dep: S2-04, S2-05, S2-07, S2-08
+- [ ] **S2-10: Pruebas E2E con Playwright** — Prioridad: Alta — Dep: S2-07, S2-08
+- [ ] **S2-11: CI Paso 2, blog post y cierre del Sprint 2 (v0.2)** — Prioridad: Alta — Dep: S2-09, S2-10
 - [x] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna (Completado en PR #14)
 - [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02 (Completado en PR #15)
 - [ ] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios** — Prioridad: Alta — Dep: S2-04
