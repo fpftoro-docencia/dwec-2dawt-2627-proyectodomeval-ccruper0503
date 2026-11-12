@@ -191,18 +191,46 @@
               </div>
 
               <div class="row g-3 mb-3">
-                <div class="col-sm-6 col-lg-3">
-                  <label for="duracion" class="form-label">Duración (min) *</label>
+                <div class="col-sm-6 col-lg-4">
+                  <label class="form-label">Duración *</label>
+                  <div class="input-group">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="duracion-horas"
+                      name="duracionHoras"
+                      min="0"
+                      max="24"
+                      value="0"
+                      placeholder="0"
+                      aria-label="Horas de entrenamiento"
+                    />
+                    <span class="input-group-text">h</span>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="duracion-minutos"
+                      name="duracionMinutos"
+                      min="0"
+                      max="59"
+                      value="45"
+                      placeholder="45"
+                      aria-label="Minutos de entrenamiento"
+                    />
+                    <span class="input-group-text">min</span>
+                  </div>
                   <input
-                    type="number"
-                    class="form-control"
+                    type="hidden"
                     id="duracion"
                     name="duracion"
+                    value="45"
                     min="1"
                     max="1440"
-                    placeholder="60"
                     required
                   />
+                  <div class="text-secondary small mt-1" id="duracion-total-texto">
+                    Tiempo total: <strong>45 min</strong> (0h 45m)
+                  </div>
                   <div class="invalid-feedback" id="error-duracion">Mínimo 1 minuto.</div>
                 </div>
 
@@ -348,34 +376,7 @@
               </div>
 
               <div id="contenedor-ejercicios" class="d-flex flex-column gap-2 mb-2">
-                <!-- Fila de ejemplo 1 -->
-                <div
-                  class="d-flex align-items-center gap-2 p-2 rounded border border-secondary border-opacity-10"
-                  style="background: rgba(15, 23, 42, 0.4)"
-                >
-                  <input
-                    type="text"
-                    class="form-control form-control-sm"
-                    name="ejercicioNombre[]"
-                    placeholder="Nombre ejercicio (ej. Sentadilla libre o Intervalos 400m)"
-                    value="Sentadilla búlgara con mancuernas"
-                  />
-                  <input
-                    type="text"
-                    class="form-control form-control-sm"
-                    name="ejercicioDetalle[]"
-                    placeholder="Series x Reps (ej. 4 x 10 con 18kg)"
-                    value="4 series x 10 reps @ 20kg"
-                    style="max-width: 14rem"
-                  />
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger btn-sm px-2"
-                    title="Eliminar fila"
-                  >
-                    ✕
-                  </button>
-                </div>
+                <!-- Filas dinámicas generadas mediante JavaScript desde plantilla-ejercicio -->
               </div>
             </div>
 
@@ -508,33 +509,51 @@
         </aside>
       </div>
 
-      <!-- Plantilla de fila dinámica de ejercicio para Sprint 2 -->
+      <!-- Plantilla de fila dinámica de ejercicio para Sprint 2 (Requisitos 13 y 17) -->
       <template id="plantilla-ejercicio">
         <div
-          class="d-flex align-items-center gap-2 p-2 rounded border border-secondary border-opacity-10"
+          class="fila-ejercicio d-flex align-items-start gap-2 p-2 rounded border border-secondary border-opacity-10"
           style="background: rgba(15, 23, 42, 0.4)"
         >
-          <input
-            type="text"
-            class="form-control form-control-sm campo-ejercicio-nombre"
-            name="ejercicioNombre[]"
-            placeholder="Nombre del ejercicio o intervalo"
-            required
-          />
-          <input
-            type="text"
-            class="form-control form-control-sm campo-ejercicio-detalle"
-            name="ejercicioDetalle[]"
-            placeholder="Series x Reps @ Carga"
-            style="max-width: 14rem"
-          />
-          <button
-            type="button"
-            class="btn btn-outline-danger btn-sm px-2 boton-quitar-ejercicio"
-            title="Eliminar fila"
-          >
-            ✕
-          </button>
+          <div class="flex-grow-1">
+            <label class="form-label small text-secondary mb-1 etiqueta-ejercicio-nombre"
+              >Ejercicio *</label
+            >
+            <input
+              type="text"
+              class="form-control form-control-sm campo-ejercicio-nombre"
+              name="ejercicioNombre[]"
+              placeholder="Nombre del ejercicio o intervalo"
+              required
+            />
+            <div class="invalid-feedback caja-error-ejercicio-nombre">
+              Indica el nombre del ejercicio.
+            </div>
+          </div>
+          <div style="max-width: 14rem">
+            <label class="form-label small text-secondary mb-1 etiqueta-ejercicio-detalle"
+              >Series x Reps @ Carga</label
+            >
+            <input
+              type="text"
+              class="form-control form-control-sm campo-ejercicio-detalle"
+              name="ejercicioDetalle[]"
+              placeholder="ej. 4x12@80kg"
+            />
+            <div class="invalid-feedback caja-error-ejercicio-detalle">
+              Indica las series y repeticiones.
+            </div>
+          </div>
+          <div class="pt-4">
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm px-2 boton-quitar-ejercicio"
+              title="Eliminar fila"
+              aria-label="Eliminar fila de ejercicio"
+            >
+              ✕
+            </button>
+          </div>
         </div>
       </template>
     </main>
