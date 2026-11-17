@@ -143,14 +143,15 @@
 - [x] **S2-03: Módulo de Paginación pura y navegación por URL** — (12/11/2026) — Creación de `js/paginacion.js` con función pura `paginar`, corrección de límites, generación de controles accesibles, delegación de eventos (`closest`) y sincronización en URL con `URLSearchParams` y `history.replaceState`. 15 tests unitarios en `tests/unitarios/paginacion.test.js`. PR #14.
 - [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — (12/11/2026) — Implementación de `js/paginas/ficha.js` y conexión en `ficha.html`. Modo alta vs edición (`?id=...`), campo condicional interactivo con `hidden` y `disabled`, fecha máxima de hoy por código, lectura con `FormData` y redirección con aviso. 7 tests unitarios en `tests/unitarios/ficha.test.js`. PR #15.
 - [x] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios y duración horas/minutos** — (12/11/2026) — Plantilla `<template id="plantilla-ejercicio">` con límites de 1 a 5 ejercicios, botones interactivos desactivados en extremos, IDs dinámicos y enlaces de accesibilidad (`htmlFor`, `aria-describedby`), extracción con `FormData.getAll()`, cálculo matemático automático de horas y minutos a minutos totales (`#duracion`), y 9 tests unitarios en `tests/unitarios/ficha.test.js`. PR #16.
+- [x] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — (17/11/2026) — Creación de `js/validacion-formularios.js` (`iniciarValidacionFormulario`, `validadoresFormulario`) e integración en `index.html`, `registro.html` y `ficha.html` con `novalidate`, `data-validar`, `data-depende-de`, `setCustomValidity`, `aria-describedby`, `aria-invalid`, `is-invalid`/`invalid-feedback` y foco en el primer error. 183 tests unitarios en verde. PR #17.
 
 ---
 
 ## 🚧 En Progreso
 
 - [ ] **Sprint 2 (v0.2): CRUD de Entidades, Administración y CI Completa:**
-  - *Estado:* Tareas S2-01, S2-02, S2-03, S2-04 y S2-05 completadas e integradas en `main` (PRs #12 a #16).
-  - *Siguiente paso inmediato (pendiente de reanudación):* Comenzar con la tarea `S2-06: Sistema de validación en tiempo real en los 3 formularios` (Requisito 19) en la rama `sprint-2-validacion-tiempo-real`.
+  - *Estado:* Tareas S2-01 a S2-06 completadas e integradas en `main` (PRs #12 a #17).
+  - *Siguiente paso inmediato (pendiente de reanudación):* Comenzar con la tarea `S2-07: Listado con buscador con debounce y borrado modal` en la rama `sprint-2-listado`.
 
 ---
 
@@ -162,7 +163,7 @@
 - [x] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna (Completado en PR #14)
 - [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02 (Completado en PR #15)
 - [x] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios y duración horas/min** — Prioridad: Alta — Dep: S2-04 (Completado en PR #16)
-- [ ] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — Prioridad: Alta — Dep: S1-06, S1-07, S2-04, S2-05
+- [x] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — Prioridad: Alta — Dep: S1-06, S1-07, S2-04, S2-05 (Completado en PR #17)
 - [ ] **S2-07: Listado con buscador con debounce y borrado modal** — Prioridad: Alta — Dep: S2-01, S2-03
 - [ ] **S2-08: Zona de administración de usuarios y roles** — Prioridad: Media — Dep: S1-04, S2-03
 - [ ] **S2-09: Tests de integración de páginas** — Prioridad: Alta — Dep: S2-04, S2-05, S2-07, S2-08
