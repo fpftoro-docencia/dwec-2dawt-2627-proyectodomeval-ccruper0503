@@ -197,6 +197,8 @@
                   name="nombreUsuario"
                   autocomplete="username"
                   placeholder="ej. runner_experto"
+                  data-validar="nombreUsuario"
+                  aria-describedby="error-usuario"
                   required
                 />
               </div>
@@ -243,6 +245,8 @@
                   name="correo"
                   autocomplete="email"
                   placeholder="atleta@sportlog.es"
+                  data-validar="correo"
+                  aria-describedby="error-correo"
                   required
                 />
               </div>
@@ -285,6 +289,8 @@
                   name="clave"
                   autocomplete="new-password"
                   placeholder="Mínimo 8 caracteres"
+                  data-validar="clave"
+                  aria-describedby="error-clave"
                   required
                 />
               </div>
@@ -339,6 +345,9 @@
                   name="repetirClave"
                   autocomplete="new-password"
                   placeholder="Repite tu contraseña"
+                  data-validar="repetirClave"
+                  data-depende-de="clave"
+                  aria-describedby="error-repetir-clave"
                   required
                 />
               </div>
@@ -351,6 +360,8 @@
                 class="form-check-input"
                 id="terminos"
                 name="terminos"
+                data-validar="terminos"
+                aria-describedby="error-terminos"
                 required
               />
               <label class="form-check-label" for="terminos">

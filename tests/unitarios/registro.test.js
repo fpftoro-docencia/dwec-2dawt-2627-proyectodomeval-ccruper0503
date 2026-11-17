@@ -17,20 +17,20 @@ describe('Controlador de Registro (S1-06 / S1-09)', () => {
 
     document.body.innerHTML = `
       <div id="contenedor-avisos" class="region-avisos"></div>
-      <form id="formulario-registro">
-        <input id="nombre-usuario" name="nombreUsuario" />
+      <form id="formulario-registro" novalidate>
+        <input id="nombre-usuario" name="nombreUsuario" data-validar="nombreUsuario" aria-describedby="error-usuario" required />
         <div id="error-usuario" class="invalid-feedback"></div>
 
-        <input id="correo" name="correo" type="email" />
+        <input id="correo" name="correo" type="email" data-validar="correo" aria-describedby="error-correo" required />
         <div id="error-correo" class="invalid-feedback"></div>
 
-        <input id="clave" name="clave" type="password" />
+        <input id="clave" name="clave" type="password" data-validar="clave" aria-describedby="error-clave" required />
         <div id="error-clave" class="invalid-feedback"></div>
 
-        <input id="repetir-clave" name="repetirClave" type="password" />
+        <input id="repetir-clave" name="repetirClave" type="password" data-validar="repetirClave" data-depende-de="clave" aria-describedby="error-repetir-clave" required />
         <div id="error-repetir-clave" class="invalid-feedback"></div>
 
-        <input id="terminos" name="terminos" type="checkbox" />
+        <input id="terminos" name="terminos" type="checkbox" data-validar="terminos" aria-describedby="error-terminos" required />
         <div id="error-terminos" class="invalid-feedback"></div>
 
         <span id="req-longitud"></span>
@@ -226,5 +226,116 @@ describe('Controlador de Registro (S1-06 / S1-09)', () => {
 
     expect(navegar).toHaveBeenCalledTimes(1);
     expect(navegar).toHaveBeenCalledWith('listado.html');
+  });
+
+  it('valida cada campo al salir (blur) y desde entonces en cada input, incluyendo unicidad de usuario', () => {
+    almacenUsuarios.setItem(
+      CLAVE_ALMACEN_USUARIOS,
+      JSON.stringify([{ nombreUsuario: 'atleta_ocupado', correo: 'x@sportlog.es' }]),
+    );
+
+    iniciarRegistro({
+      documento: doc,
+      almacenUsuarios,
+      almacenSesion,
+      navegar,
+    });
+
+    const campoUsuario = doc.getElementById('nombre-usuario');
+    const errorUsuario = doc.getElementById('error-usuario');
+
+    // Antes del primer blur, escribir no muestra error todavía
+    campoUsuario.value = 'ab';
+    campoUsuario.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(false);
+    expect(campoUsuario.hasAttribute('aria-invalid')).toBe(false);
+
+    // Al salir (blur), se valida por primera vez y marca error
+    campoUsuario.dispatchEvent(new Event('blur'));
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(true);
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('true');
+    expect(errorUsuario.classList.contains('d-block')).toBe(true);
+    expect(errorUsuario.textContent).not.toBe('');
+
+    // Desde entonces revalida en input: si el nombre ya existe, muestra error de unicidad
+    campoUsuario.value = 'atleta_ocupado';
+    campoUsuario.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(true);
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('true');
+    expect(errorUsuario.textContent).toContain('ocupado');
+
+    // Al corregir con un nombre válido y libre, limpia el error en input
+    campoUsuario.value = 'atleta_libre';
+    campoUsuario.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(false);
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('false');
+    expect(errorUsuario.classList.contains('d-block')).toBe(false);
+    expect(errorUsuario.textContent).toBe('');
+  });
+
+  it('revalida repetir-clave automáticamente cuando cambia clave', () => {
+    iniciarRegistro({
+      documento: doc,
+      almacenUsuarios,
+      almacenSesion,
+      navegar,
+    });
+
+    const campoClave = doc.getElementById('clave');
+    const campoRepetir = doc.getElementById('repetir-clave');
+    const errorRepetir = doc.getElementById('error-repetir-clave');
+
+    campoClave.value = 'Deporte2026';
+    campoClave.dispatchEvent(new Event('input', { bubbles: true }));
+    campoClave.dispatchEvent(new Event('blur'));
+
+    campoRepetir.value = 'Deporte2026';
+    campoRepetir.dispatchEvent(new Event('blur'));
+    expect(campoRepetir.classList.contains('is-invalid')).toBe(false);
+    expect(campoRepetir.getAttribute('aria-invalid')).toBe('false');
+
+    // Al modificar la contraseña principal, repetir-clave se revalida y pasa a ser inválido
+    campoClave.value = 'Deporte2027';
+    campoClave.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(campoRepetir.classList.contains('is-invalid')).toBe(true);
+    expect(campoRepetir.getAttribute('aria-invalid')).toBe('true');
+    expect(errorRepetir.classList.contains('d-block')).toBe(true);
+    expect(errorRepetir.textContent).not.toBe('');
+
+    // Al volver a hacerlas coincidir desde clave, repetir-clave vuelve a ser válido
+    campoClave.value = 'Deporte2026';
+    campoClave.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(campoRepetir.classList.contains('is-invalid')).toBe(false);
+    expect(campoRepetir.getAttribute('aria-invalid')).toBe('false');
+    expect(errorRepetir.textContent).toBe('');
+  });
+
+  it('al enviar con errores enfoca el primer campo inválido, marca aria-invalid y muestra aviso', () => {
+    iniciarRegistro({
+      documento: doc,
+      almacenUsuarios,
+      almacenSesion,
+      navegar,
+    });
+
+    const campoUsuario = doc.getElementById('nombre-usuario');
+    const campoCorreo = doc.getElementById('correo');
+    const form = doc.getElementById('formulario-registro');
+    const contenedorAvisos = doc.getElementById('contenedor-avisos');
+
+    // Usuario válido, correo inválido -> el foco debe ir al correo
+    campoUsuario.value = 'atleta_valido';
+    campoCorreo.value = 'correo-invalido';
+
+    form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('false');
+    expect(campoCorreo.classList.contains('is-invalid')).toBe(true);
+    expect(campoCorreo.getAttribute('aria-invalid')).toBe('true');
+    expect(doc.activeElement).toBe(campoCorreo);
+    expect(contenedorAvisos.textContent).toContain(
+      'Por favor, corrige los errores del formulario.',
+    );
+    expect(navegar).not.toHaveBeenCalled();
   });
 });

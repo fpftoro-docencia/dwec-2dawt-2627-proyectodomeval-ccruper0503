@@ -22,6 +22,7 @@ import {
   crearEntrenamiento,
   actualizarEntrenamiento,
 } from '../entrenamientos.js';
+import { iniciarValidacionFormulario } from '../validacion-formularios.js';
 
 export const MIN_EJERCICIOS = 1;
 export const MAX_EJERCICIOS = 5;
@@ -88,6 +89,26 @@ export function iniciarFicha({
   const plantillaEjercicio = documento.getElementById('plantilla-ejercicio');
   const btnGuardar = documento.getElementById('btn-guardar-ficha');
 
+  // 0. Validación en tiempo real compartida (S2-06 / Requisitos 19 y 20)
+  const validacion = iniciarValidacionFormulario(formulario, {
+    validadores: {
+      duracionTotal: () => {
+        const horas = parseInt(campoHoras?.value, 10) || 0;
+        const minutos = parseInt(campoMinutos?.value, 10) || 0;
+        if (horas * 60 + minutos < 1) {
+          return {
+            valido: false,
+            error: 'La duración total debe ser de al menos 1 minuto.',
+          };
+        }
+        return { valido: true };
+      },
+    },
+    dependencias: {
+      'duracion-horas': 'duracion-minutos',
+    },
+  });
+
   // 1. Limitar fecha máxima a hoy mediante código (Requisito 17)
   const hoy = new Date().toISOString().split('T')[0];
   if (campoFecha) {
@@ -120,12 +141,14 @@ export function iniciarFicha({
       campoNombreCompeticion.disabled = !activo;
       if (!activo) {
         campoNombreCompeticion.value = '';
+        validacion?.validarCampo(campoNombreCompeticion);
       }
     }
     if (campoDorsal) {
       campoDorsal.disabled = !activo;
       if (!activo) {
         campoDorsal.value = '';
+        validacion?.validarCampo(campoDorsal);
       }
     }
   }
@@ -359,7 +382,7 @@ export function iniciarFicha({
   formulario.addEventListener('submit', (evento) => {
     evento.preventDefault();
 
-    if (!formulario.checkValidity()) {
+    if (validacion ? !validacion.validarFormulario() : !formulario.checkValidity()) {
       return;
     }
 
