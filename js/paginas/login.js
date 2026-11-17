@@ -8,6 +8,7 @@
 import { iniciarAvisos, lanzarAviso, guardarAvisoParaSiguientePagina } from '../avisos.js';
 import { verificarCredenciales } from '../usuarios.js';
 import { iniciarSesion, haySesion } from '../sesion.js';
+import { iniciarValidacionFormulario } from '../validacion-formularios.js';
 
 /**
  * Inicializa la página de inicio de sesión.
@@ -45,13 +46,15 @@ export function iniciarLogin({
   // Bandera para evitar envíos duplicados (intro rápido o clics repetidos)
   let enviando = false;
 
-  // Limpiar estilos de error al teclear
-  campoUsuario?.addEventListener('input', () => {
-    campoUsuario.classList.remove('is-invalid');
-  });
-
-  campoClave?.addEventListener('input', () => {
-    campoClave.classList.remove('is-invalid');
+  const validacion = iniciarValidacionFormulario(formulario, {
+    validadores: {
+      identificador: (valor) => {
+        if (typeof valor !== 'string' || valor.trim() === '') {
+          return { valido: false, error: 'Introduce tu nombre de usuario o correo.' };
+        }
+        return { valido: true };
+      },
+    },
   });
 
   formulario.addEventListener('submit', async (evento) => {
@@ -62,35 +65,12 @@ export function iniciarLogin({
       return;
     }
 
-    const nombreUsuario = campoUsuario?.value.trim() ?? '';
-    const clave = campoClave?.value ?? '';
-
-    // Validar presencia de campos
-    let hayError = false;
-
-    if (!nombreUsuario) {
-      campoUsuario?.classList.add('is-invalid');
-      if (!hayError) {
-        campoUsuario?.focus();
-      }
-      hayError = true;
-    } else {
-      campoUsuario?.classList.remove('is-invalid');
-    }
-
-    if (!clave) {
-      campoClave?.classList.add('is-invalid');
-      if (!hayError) {
-        campoClave?.focus();
-      }
-      hayError = true;
-    } else {
-      campoClave?.classList.remove('is-invalid');
-    }
-
-    if (hayError) {
+    if (validacion && !validacion.validarFormulario()) {
       return;
     }
+
+    const nombreUsuario = campoUsuario?.value.trim() ?? '';
+    const clave = campoClave?.value ?? '';
 
     // Bloquear envíos concurrentes durante el hashing asíncrono
     enviando = true;

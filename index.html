@@ -231,10 +231,14 @@
                   name="nombreUsuario"
                   autocomplete="username"
                   placeholder="ej. atleta_pro o admin"
+                  data-validar="identificador"
+                  aria-describedby="error-nombre-usuario"
                   required
                 />
               </div>
-              <div class="invalid-feedback">Introduce tu nombre de usuario.</div>
+              <div id="error-nombre-usuario" class="invalid-feedback">
+                Introduce tu nombre de usuario o correo.
+              </div>
             </div>
 
             <div class="mb-4">
@@ -275,10 +279,11 @@
                   name="clave"
                   autocomplete="current-password"
                   placeholder="••••••••"
+                  aria-describedby="error-clave"
                   required
                 />
               </div>
-              <div class="invalid-feedback">Introduce tu contraseña.</div>
+              <div id="error-clave" class="invalid-feedback">Introduce tu contraseña.</div>
             </div>
 
             <button type="submit" class="btn btn-primary w-100 btn-brillo py-3 fs-6" id="btn-login">

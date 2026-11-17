@@ -17,9 +17,27 @@ describe('Controlador de Login (S1-07)', () => {
 
     document.body.innerHTML = `
       <div id="contenedor-avisos" class="region-avisos"></div>
-      <form id="formulario-login">
-        <input id="nombre-usuario" name="nombreUsuario" />
-        <input id="clave" name="clave" type="password" />
+      <form id="formulario-login" novalidate>
+        <div class="mb-3">
+          <input
+            id="nombre-usuario"
+            name="nombreUsuario"
+            data-validar="identificador"
+            aria-describedby="error-nombre-usuario"
+            required
+          />
+          <div id="error-nombre-usuario" class="invalid-feedback"></div>
+        </div>
+        <div class="mb-4">
+          <input
+            id="clave"
+            name="clave"
+            type="password"
+            aria-describedby="error-clave"
+            required
+          />
+          <div id="error-clave" class="invalid-feedback"></div>
+        </div>
         <button id="btn-login" type="submit">Entrar</button>
       </form>
     `;
@@ -39,7 +57,7 @@ describe('Controlador de Login (S1-07)', () => {
     expect(navegar).toHaveBeenCalledWith('listado.html');
   });
 
-  it('marca los campos como inválidos si se envían vacíos', () => {
+  it('marca los campos como inválidos, actualiza aria-invalid y enfoca el primero si se envían vacíos', () => {
     iniciarLogin({
       documento: doc,
       almacenUsuarios,
@@ -48,14 +66,86 @@ describe('Controlador de Login (S1-07)', () => {
     });
 
     const form = doc.getElementById('formulario-login');
-    form.dispatchEvent(new Event('submit', { cancelable: true }));
-
     const campoUsuario = doc.getElementById('nombre-usuario');
     const campoClave = doc.getElementById('clave');
+    const errorUsuario = doc.getElementById('error-nombre-usuario');
+    const errorClave = doc.getElementById('error-clave');
+    const focusSpy = vi.spyOn(campoUsuario, 'focus');
+
+    form.dispatchEvent(new Event('submit', { cancelable: true }));
 
     expect(campoUsuario.classList.contains('is-invalid')).toBe(true);
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('true');
+    expect(errorUsuario.classList.contains('d-block')).toBe(true);
+    expect(errorUsuario.textContent).not.toBe('');
+
     expect(campoClave.classList.contains('is-invalid')).toBe(true);
+    expect(campoClave.getAttribute('aria-invalid')).toBe('true');
+    expect(errorClave.classList.contains('d-block')).toBe(true);
+    expect(errorClave.textContent).not.toBe('');
+
+    expect(focusSpy).toHaveBeenCalled();
+    expect(doc.getElementById('contenedor-avisos').textContent).toContain(
+      'Revisa los campos marcados antes de continuar.',
+    );
     expect(navegar).not.toHaveBeenCalled();
+  });
+
+  it('enfoca la contraseña al enviar si solo falta la contraseña', () => {
+    iniciarLogin({
+      documento: doc,
+      almacenUsuarios,
+      almacenSesion,
+      navegar,
+    });
+
+    const form = doc.getElementById('formulario-login');
+    const campoUsuario = doc.getElementById('nombre-usuario');
+    const campoClave = doc.getElementById('clave');
+    const focusClaveSpy = vi.spyOn(campoClave, 'focus');
+
+    campoUsuario.value = 'elena';
+    form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(false);
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('false');
+    expect(campoClave.classList.contains('is-invalid')).toBe(true);
+    expect(campoClave.getAttribute('aria-invalid')).toBe('true');
+    expect(focusClaveSpy).toHaveBeenCalled();
+    expect(navegar).not.toHaveBeenCalled();
+  });
+
+  it('valida por primera vez en blur y revalida en input hasta corregir el campo', () => {
+    iniciarLogin({
+      documento: doc,
+      almacenUsuarios,
+      almacenSesion,
+      navegar,
+    });
+
+    const campoUsuario = doc.getElementById('nombre-usuario');
+    const errorUsuario = doc.getElementById('error-nombre-usuario');
+
+    // Antes de blur, input no debe marcar error
+    campoUsuario.value = '   ';
+    campoUsuario.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(false);
+    expect(campoUsuario.hasAttribute('aria-invalid')).toBe(false);
+
+    // Al salir (blur), valida y marca error (espacios en blanco no son válidos)
+    campoUsuario.dispatchEvent(new Event('blur'));
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(true);
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('true');
+    expect(errorUsuario.classList.contains('d-block')).toBe(true);
+    expect(errorUsuario.textContent).toContain('Introduce tu nombre de usuario o correo.');
+
+    // Desde entonces, input revalida en tiempo real y limpia el error al corregir
+    campoUsuario.value = 'elena@test.es';
+    campoUsuario.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(campoUsuario.classList.contains('is-invalid')).toBe(false);
+    expect(campoUsuario.getAttribute('aria-invalid')).toBe('false');
+    expect(errorUsuario.classList.contains('d-block')).toBe(false);
+    expect(errorUsuario.textContent).toBe('');
   });
 
   it('con contraseña incorrecta, emite aviso, limpia la contraseña y le otorga el foco', async () => {
