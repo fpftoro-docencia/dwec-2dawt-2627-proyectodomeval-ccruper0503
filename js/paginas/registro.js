@@ -8,14 +8,8 @@
 import { iniciarAvisos, lanzarAviso, guardarAvisoParaSiguientePagina } from '../avisos.js';
 import { existeUsuario, registrarUsuario } from '../usuarios.js';
 import { iniciarSesion, obtenerSesion } from '../sesion.js';
-import {
-  validarNombreUsuario,
-  validarCorreo,
-  comprobarRequisitosClave,
-  validarClave,
-  validarRepeticionClave,
-  validarTerminos,
-} from '../validadores.js';
+import { validarNombreUsuario, comprobarRequisitosClave } from '../validadores.js';
+import { iniciarValidacionFormulario } from '../validacion-formularios.js';
 
 /**
  * Inicializa la página de registro.
@@ -43,15 +37,7 @@ export function iniciarRegistro({
   const campoUsuario = documento.getElementById('nombre-usuario');
   const campoCorreo = documento.getElementById('correo');
   const campoClave = documento.getElementById('clave');
-  const campoRepetir = documento.getElementById('repetir-clave');
-  const campoTerminos = documento.getElementById('terminos');
   const botonRegistro = documento.getElementById('btn-registro');
-
-  const errorUsuario = documento.getElementById('error-usuario');
-  const errorCorreo = documento.getElementById('error-correo');
-  const errorClave = documento.getElementById('error-clave');
-  const errorRepetir = documento.getElementById('error-repetir-clave');
-  const errorTerminos = documento.getElementById('error-terminos');
 
   const reqLongitud = documento.getElementById('req-longitud');
   const reqMinuscula = documento.getElementById('req-minuscula');
@@ -72,77 +58,29 @@ export function iniciarRegistro({
     reqCifra?.classList.toggle('cumplido', tieneCifra);
   }
 
-  campoClave?.addEventListener('input', () => {
-    actualizarFeedbackClave();
-    if (campoClave.classList.contains('is-invalid')) {
-      validarCampoClave();
-    }
+  campoClave?.addEventListener('input', actualizarFeedbackClave);
+
+  // 2. Validación en tiempo real compartida (blur en captura, input/change y dependencia repetirClave)
+  const validadorFormulario = iniciarValidacionFormulario(formulario, {
+    validadores: {
+      nombreUsuario: (valor) => {
+        const res = validarNombreUsuario(valor);
+        if (!res.valido) {
+          return res;
+        }
+        if (existeUsuario(valor, almacenUsuarios)) {
+          return {
+            valido: false,
+            error: 'Este nombre de usuario ya está ocupado.',
+          };
+        }
+        return { valido: true };
+      },
+    },
+    mensajeErrorFormulario: 'Por favor, corrige los errores del formulario.',
   });
 
-  // Funciones de validación de campos
-  function marcarCampo(campo, elementoError, resultado) {
-    if (!campo || !elementoError) {
-      return resultado.valido;
-    }
-    if (resultado.valido) {
-      campo.classList.remove('is-invalid');
-      campo.setAttribute('aria-invalid', 'false');
-      elementoError.textContent = '';
-    } else {
-      campo.classList.add('is-invalid');
-      campo.setAttribute('aria-invalid', 'true');
-      elementoError.textContent = resultado.error || 'Valor no válido.';
-    }
-    return resultado.valido;
-  }
-
-  function validarCampoUsuario() {
-    const valor = campoUsuario?.value || '';
-    const res = validarNombreUsuario(valor);
-    if (!res.valido) {
-      return marcarCampo(campoUsuario, errorUsuario, res);
-    }
-    if (existeUsuario(valor, almacenUsuarios)) {
-      return marcarCampo(campoUsuario, errorUsuario, {
-        valido: false,
-        error: 'Este nombre de usuario ya está ocupado.',
-      });
-    }
-    return marcarCampo(campoUsuario, errorUsuario, { valido: true });
-  }
-
-  function validarCampoCorreo() {
-    return marcarCampo(campoCorreo, errorCorreo, validarCorreo(campoCorreo?.value || ''));
-  }
-
-  function validarCampoClave() {
-    return marcarCampo(campoClave, errorClave, validarClave(campoClave?.value || ''));
-  }
-
-  function validarCampoRepetir() {
-    return marcarCampo(
-      campoRepetir,
-      errorRepetir,
-      validarRepeticionClave(campoClave?.value || '', campoRepetir?.value || ''),
-    );
-  }
-
-  function validarCampoTerminos() {
-    return marcarCampo(
-      campoTerminos,
-      errorTerminos,
-      validarTerminos(Boolean(campoTerminos?.checked)),
-    );
-  }
-
-  // Validación al salir del campo (blur)
-  campoUsuario?.addEventListener('blur', validarCampoUsuario);
-  campoCorreo?.addEventListener('blur', validarCampoCorreo);
-  campoClave?.addEventListener('blur', validarCampoClave);
-  campoRepetir?.addEventListener('blur', validarCampoRepetir);
-  campoTerminos?.addEventListener('change', validarCampoTerminos);
-
-  // 2. Envío del formulario
+  // 3. Envío del formulario
   formulario.addEventListener('submit', async (evento) => {
     evento.preventDefault();
 
@@ -151,18 +89,7 @@ export function iniciarRegistro({
       return;
     }
 
-    // Validar todos los campos
-    const okUsuario = validarCampoUsuario();
-    const okCorreo = validarCampoCorreo();
-    const okClave = validarCampoClave();
-    const okRepetir = validarCampoRepetir();
-    const okTerminos = validarCampoTerminos();
-
-    if (!okUsuario || !okCorreo || !okClave || !okRepetir || !okTerminos) {
-      lanzarAviso(formulario, 'Por favor, corrige los errores del formulario.', 'danger');
-      // Enfocar el primer campo inválido
-      const primerInvalido = formulario.querySelector('.is-invalid');
-      primerInvalido?.focus();
+    if (!validadorFormulario?.validarFormulario()) {
       return;
     }
 
