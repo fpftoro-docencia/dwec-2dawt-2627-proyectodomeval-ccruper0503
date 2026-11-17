@@ -149,6 +149,7 @@
                   id="titulo-sesion"
                   name="titulo"
                   placeholder="ej. Rodaje Progresivo 12K o Series de Fuerza"
+                  aria-describedby="error-titulo"
                   required
                 />
                 <div class="invalid-feedback" id="error-titulo">
@@ -159,7 +160,13 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label for="disciplina" class="form-label"> Disciplina deportiva * </label>
-                  <select class="form-select" id="disciplina" name="disciplina" required>
+                  <select
+                    class="form-select"
+                    id="disciplina"
+                    name="disciplina"
+                    aria-describedby="error-disciplina"
+                    required
+                  >
                     <option value="" selected disabled>Selecciona disciplina...</option>
                     <option value="running">🏃 Running / Carrera a pie</option>
                     <option value="trail">⛰️ Trail Running / Montaña</option>
@@ -177,7 +184,14 @@
 
                 <div class="col-md-6">
                   <label for="fecha" class="form-label"> Fecha del entrenamiento * </label>
-                  <input type="date" class="form-control" id="fecha" name="fecha" required />
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="fecha"
+                    name="fecha"
+                    aria-describedby="error-fecha"
+                    required
+                  />
                   <div class="invalid-feedback" id="error-fecha">Indica la fecha de la sesión.</div>
                 </div>
               </div>
@@ -204,6 +218,7 @@
                       value="0"
                       placeholder="0"
                       aria-label="Horas de entrenamiento"
+                      aria-describedby="error-duracion"
                     />
                     <span class="input-group-text">h</span>
                     <input
@@ -216,6 +231,8 @@
                       value="45"
                       placeholder="45"
                       aria-label="Minutos de entrenamiento"
+                      aria-describedby="error-duracion"
+                      data-validar="duracionTotal"
                     />
                     <span class="input-group-text">min</span>
                   </div>
@@ -244,6 +261,7 @@
                     name="distancia"
                     min="0"
                     placeholder="10.5"
+                    aria-describedby="error-distancia"
                   />
                   <div class="invalid-feedback" id="error-distancia">Distancia no válida.</div>
                 </div>
@@ -258,6 +276,8 @@
                     min="40"
                     max="230"
                     placeholder="155"
+                    aria-describedby="error-frecuencia"
+                    data-validar="pulsaciones"
                   />
                   <div class="invalid-feedback" id="error-frecuencia">Entre 40 y 230 ppm.</div>
                 </div>
@@ -271,6 +291,7 @@
                     name="calorias"
                     min="0"
                     placeholder="650"
+                    aria-describedby="error-calorias"
                   />
                   <div class="invalid-feedback" id="error-calorias">Valor calórico inválido.</div>
                 </div>
@@ -333,7 +354,7 @@
                 <div class="row g-3">
                   <div class="col-md-7">
                     <label for="nombre-competicion" class="form-label"
-                      >Nombre del Evento / Carrera</label
+                      >Nombre del Evento / Carrera *</label
                     >
                     <input
                       type="text"
@@ -341,8 +362,13 @@
                       id="nombre-competicion"
                       name="nombreCompeticion"
                       placeholder="ej. Media Maratón Behobia-San Sebastián"
+                      aria-describedby="error-nombre-competicion"
+                      required
                       disabled
                     />
+                    <div class="invalid-feedback" id="error-nombre-competicion">
+                      Indica el nombre de la competición.
+                    </div>
                   </div>
                   <div class="col-md-5">
                     <label for="dorsal" class="form-label">Dorsal / Posición</label>
@@ -352,8 +378,10 @@
                       id="dorsal"
                       name="dorsal"
                       placeholder="ej. Dorsal #412 (Puesto 84)"
+                      aria-describedby="error-dorsal"
                       disabled
                     />
+                    <div class="invalid-feedback" id="error-dorsal">Dorsal no válido.</div>
                   </div>
                 </div>
               </div>
@@ -395,7 +423,9 @@
                   name="notas"
                   rows="3"
                   placeholder="Detalla climatología, sensaciones de energía, zapatillas empleadas, nutrición e hidratación..."
+                  aria-describedby="error-notas"
                 ></textarea>
+                <div class="invalid-feedback" id="error-notas"></div>
               </div>
             </div>
 
@@ -539,6 +569,7 @@
               class="form-control form-control-sm campo-ejercicio-detalle"
               name="ejercicioDetalle[]"
               placeholder="ej. 4x12@80kg"
+              data-validar="ejercicioDetalle"
             />
             <div class="invalid-feedback caja-error-ejercicio-detalle">
               Indica las series y repeticiones.
