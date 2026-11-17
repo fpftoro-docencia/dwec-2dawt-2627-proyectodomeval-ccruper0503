@@ -249,10 +249,26 @@
           </div>
         </div>
 
-        <div class="pills-disciplinas">
-          <button type="button" class="pill-filtro activo">Todos (0)</button>
-          <button type="button" class="pill-filtro">👑 Administradores (0)</button>
-          <button type="button" class="pill-filtro">🏃 Deportistas (0)</button>
+        <div
+          class="pills-disciplinas"
+          id="filtros-rol-usuarios"
+          role="group"
+          aria-label="Filtrar por rol"
+        >
+          <button type="button" class="pill-filtro activo" data-filtro="todos" aria-pressed="true">
+            Todos (0)
+          </button>
+          <button
+            type="button"
+            class="pill-filtro"
+            data-filtro="administrador"
+            aria-pressed="false"
+          >
+            👑 Administradores (0)
+          </button>
+          <button type="button" class="pill-filtro" data-filtro="usuario" aria-pressed="false">
+            🏃 Deportistas (0)
+          </button>
         </div>
 
         <div>
@@ -285,7 +301,7 @@
         class="panel panel-vacio mt-4"
         id="panel-vacio-usuarios"
         aria-label="Listado de usuarios"
-        style="display: none"
+        hidden
       >
         <span class="icono-vacio">
           <svg
@@ -313,47 +329,63 @@
         aria-label="Navegación de usuarios"
         hidden
       >
-        <div class="text-secondary small">
-          Página <strong>1</strong> de <strong>1</strong> · Mostrando <strong>0</strong> deportistas
+        <div class="text-secondary small" id="resumen-paginacion-usuarios">
+          Página 1 de 1 · Mostrando 0 deportistas
         </div>
-        <ul class="paginacion-lista">
-          <li class="paginacion-item">
-            <button type="button" class="btn-pagina" disabled aria-label="Página anterior">
-              ← Anterior
-            </button>
-          </li>
-          <li class="paginacion-item">
-            <button type="button" class="btn-pagina activo" aria-current="page">1</button>
-          </li>
-          <li class="paginacion-item">
-            <button type="button" class="btn-pagina" disabled aria-label="Página siguiente">
-              Siguiente →
-            </button>
-          </li>
-        </ul>
+        <ul class="paginacion-lista" id="lista-paginacion-usuarios"></ul>
       </nav>
+
+      <!-- Diálogo nativo de confirmación para cambio de rol -->
+      <dialog
+        id="dialogo-confirmar-rol"
+        class="dialogo-modal"
+        aria-labelledby="dialogo-rol-titulo"
+        aria-describedby="dialogo-rol-descripcion"
+      >
+        <h2 id="dialogo-rol-titulo" class="h5 fw-bold mb-2">Confirmar cambio de rol</h2>
+        <p id="dialogo-rol-descripcion" class="text-secondary mb-4"></p>
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-light btn-sm" id="btn-cancelar-rol">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-warning btn-sm" id="btn-confirmar-rol">
+            Confirmar cambio
+          </button>
+        </div>
+      </dialog>
 
       <!-- Plantilla HTML de Fila para Sprint 2 -->
       <template id="plantilla-fila-usuario">
-        <tr>
-          <td>
-            <div class="usuario-celda">
-              <div class="usuario-avatar-chico"></div>
-              <div>
-                <div class="fw-bold text-white usuario-nombre"></div>
-                <div class="text-secondary small usuario-tag" style="font-size: 0.72rem"></div>
-              </div>
-            </div>
-          </td>
-          <td class="text-secondary font-monospace small usuario-correo"></td>
-          <td>
-            <span class="badge-rol"></span>
-          </td>
-          <td class="text-secondary small usuario-fecha"></td>
-          <td class="text-end">
-            <button type="button" class="btn btn-sm boton-accion-rol"></button>
-          </td>
-        </tr>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <div class="usuario-celda">
+                  <div class="usuario-avatar-chico"></div>
+                  <div>
+                    <div class="fw-bold text-white usuario-nombre"></div>
+                    <div class="text-secondary small usuario-tag" style="font-size: 0.72rem"></div>
+                  </div>
+                </div>
+              </td>
+              <td class="text-secondary font-monospace small usuario-correo"></td>
+              <td>
+                <span class="badge-rol"></span>
+              </td>
+              <td class="text-secondary small usuario-fecha"></td>
+              <td class="text-end">
+                <div class="d-inline-flex flex-column align-items-end usuario-acciones">
+                  <button type="button" class="btn btn-sm boton-accion-rol"></button>
+                  <span
+                    class="text-secondary mt-1 usuario-motivo-bloqueo"
+                    style="font-size: 0.68rem"
+                    hidden
+                  ></span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </template>
     </main>
 
