@@ -222,8 +222,15 @@
           </div>
         </div>
 
-        <div class="pills-disciplinas">
-          <button type="button" class="pill-filtro activo">Todos (0)</button>
+        <div
+          class="pills-disciplinas"
+          id="filtros-disciplinas"
+          role="group"
+          aria-label="Filtrar por disciplina"
+        >
+          <button type="button" class="pill-filtro activo" data-disciplina="todas">
+            Todos (0)
+          </button>
         </div>
 
         <div>
@@ -238,14 +245,14 @@
         class="rejilla-entrenamientos"
         id="contenedor-entrenamientos"
         aria-label="Listado de entrenamientos"
-        style="display: none"
+        hidden
       ></section>
 
       <!-- Panel de Estado Vacío (Visible cuando no hay registros) -->
       <section
         class="panel panel-vacio mt-4"
         id="panel-vacio"
-        aria-label="Listado de entrenamientos"
+        aria-label="Estado del listado de entrenamientos"
       >
         <span class="icono-vacio">
           <svg
@@ -260,8 +267,8 @@
             <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
           </svg>
         </span>
-        <h2>Aún no hay entrenamientos guardados</h2>
-        <p class="mb-3">
+        <h2 id="panel-vacio-titulo">Aún no hay entrenamientos guardados</h2>
+        <p class="mb-3" id="panel-vacio-texto">
           Registra tu primera sesión para comenzar a visualizar tus métricas y progreso.
         </p>
         <a href="ficha.html" class="btn btn-primary btn-sm">Crear primer entrenamiento</a>
@@ -274,10 +281,10 @@
         aria-label="Navegación de entrenamientos"
         hidden
       >
-        <div class="text-secondary small">
+        <div class="text-secondary small" id="resumen-paginacion">
           Página <strong>1</strong> de <strong>1</strong> · Mostrando <strong>0</strong> registros
         </div>
-        <ul class="paginacion-lista">
+        <ul class="paginacion-lista" id="lista-paginacion">
           <li class="paginacion-item">
             <button type="button" class="btn-pagina" disabled aria-label="Página anterior">
               ← Anterior
@@ -328,7 +335,7 @@
       </template>
 
       <!-- Diálogo Accesible para Confirmar Borrado -->
-      <dialog id="dialogo-borrar" class="dialogo-modal">
+      <dialog id="dialogo-borrar" class="dialogo-modal" aria-labelledby="dialogo-borrar-titulo">
         <div class="text-center mb-3">
           <div class="kpi-icono-caja fuego mx-auto mb-2" style="width: 3.2rem; height: 3.2rem">
             <svg
@@ -338,6 +345,7 @@
               fill="none"
               stroke="currentColor"
               stroke-width="2"
+              aria-hidden="true"
             >
               <path
                 d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
@@ -346,7 +354,10 @@
               <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
           </div>
-          <h2 class="h5 fw-bold text-white mb-1">¿Eliminar entrenamiento?</h2>
+          <h2 id="dialogo-borrar-titulo" class="h5 fw-bold text-white mb-1">
+            ¿Eliminar entrenamiento?
+          </h2>
+          <p id="dialogo-borrar-nombre" class="text-light small fw-semibold mb-1" hidden></p>
           <p class="text-secondary small mb-0">
             Esta acción no se puede deshacer. Los datos de la sesión se borrarán de tu navegador.
           </p>
