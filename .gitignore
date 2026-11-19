@@ -1,0 +1,16 @@
+# Dependencias
+node_modules/
+
+# Entregables y artefactos de construcción
+dist/
+docs/
+
+# Informes de tests y cobertura
+coverage/
+playwright-report/
+test-results/
+
+# Variables de entorno y ficheros del sistema
+.env
+.DS_Store
+Thumbs.db
