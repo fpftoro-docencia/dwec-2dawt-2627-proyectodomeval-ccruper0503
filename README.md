@@ -143,13 +143,13 @@ npm run docs
 
 ### Comandos disponibles en el contenedor
 
-- **Pruebas unitarias:** `npm test` (ejecuta Vitest con `happy-dom`, excluyendo `e2e/`).
+- **Pruebas unitarias y de integración:** `npm test` (ejecuta Vitest con `happy-dom`, excluyendo `e2e/`).
+- **Cobertura de código:** `npm run coverage` (verifica el umbral mínimo del `90 %` de líneas en funciones puras y genera el informe HTML en `coverage/`).
+- **Pruebas de extremo a extremo:** `npm run e2e` (arranca `serve` en el puerto `3901` y ejecuta Playwright en Chromium; con `BASE_URL=... npm run e2e` prueba una URL externa).
 - **Linter (ESLint):** `npm run lint`.
 - **Comprobación de formato (Prettier):** `npm run format:check` (o `npm run format` para formatear).
 - **Documentación JSDoc:** `npm run docs` (genera `docs/`).
 - **Compilación para publicación:** `npm run build` (ejecuta `scripts/construir.js` y copia la web y el CSS de Bootstrap a `dist/`).
-
-*(Los comandos `npm run coverage` con umbral de cobertura y `npm run e2e` con las pruebas completas de Playwright quedan pendientes de las tareas `S2-09` y `S2-10`).*
 
 ## Almacenamiento y sesión
 
@@ -305,14 +305,79 @@ No se utiliza `stopPropagation()` en ningún módulo: la delegación mediante `c
 
 ## Pruebas y cobertura
 
-<!-- 1. Tabla de la pirámide: tipo (unitario, de integración o de extremo a extremo), fichero,
-        qué prueba y cuántos tests tiene. Por qué cada cosa se prueba en ese nivel y no en otro.
-     2. Cómo simulas al usuario (eventos, requestSubmit), los servicios (AlmacenFalso, el resumen
-        de la contraseña, la navegación) y el tiempo (temporizadores falsos).
-     3. Cómo se ejecutan las mismas pruebas de extremo a extremo con serve y contra la web
-        desplegada (BASE_URL).
-     4. Pega la salida de `npm run coverage` (con el resumen de la cobertura) y de `npm run e2e`.
-        Explica qué umbral has puesto, a qué ficheros y qué queda sin probar y por qué. -->
+### Pirámide de pruebas
+
+| Tipo | Fichero | Qué prueba | Tests | Por qué en este nivel |
+|------|---------|------------|:-----:|-----------------------|
+| Unitario | `tests/unitarios/ejemplo.test.js` | Resumen SHA-256 de `resumirClave` (`js/clave.js`) con `it.each` | 3 | Función pura criptográfica sin DOM ni almacenamiento. |
+| Unitario | `tests/unitarios/validadores.test.js` | Validadores de registro (`usuario`, `correo`, `clave`, `repetirClave`, `terminos`) con `it.each` | 32 | Reglas puras y tablas de límites sin necesidad de DOM. |
+| Unitario | `tests/unitarios/validadores-entidad.test.js` | Validadores deportivos (`ritmo`, `series x reps`, `pulsaciones`) con `it.each` | 52 | Reglas regex + lógica matemática aisladas de la interfaz. |
+| Unitario | `tests/unitarios/paginacion.test.js` | Función pura `paginar`, URL (`URLSearchParams`) y controles accesibles | 15 | Lógica matemática de corte y límites verificable al instante. |
+| Unitario | `tests/unitarios/avisos.test.js` | Emisión de `CustomEvent('aviso')`, oyente en `document` y aviso diferido | 3 | Comportamiento unitario de un componente de evento propio. |
+| Unitario | `tests/unitarios/usuarios.test.js` | CRUD de usuarios, rol admin al primero, SHA-256 y JSON corrupto | 11 | Capa de datos aislada usando `AlmacenFalso`. |
+| Unitario | `tests/unitarios/sesion.test.js` | Sesión en `sessionStorage`, guardas de ruta y cabecera privada | 13 | Lógica de acceso y autorización sin navegador real. |
+| Unitario | `tests/unitarios/entrenamientos.test.js` | CRUD por usuario en `localStorage` y tolerancia a JSON dañado | 14 | Persistencia y aislamiento por clave de usuario con `AlmacenFalso`. |
+| Unitario | `tests/unitarios/validacion-formularios.test.js` | Motor `iniciarValidacionFormulario` (`blur` captura, `input`, ARIA, foco) | 9 | Contrato genérico del motor sobre un `<form>` mínimo. |
+| Unitario | `tests/unitarios/login.test.js` | Controlador `iniciarLogin`, redirección con sesión, foco y anti-doble envío | 7 | Lógica del controlador de login con DOM mínimo simulado. |
+| Unitario | `tests/unitarios/registro.test.js` | Controlador `iniciarRegistro`, indicadores de clave, unicidad y alta admin | 9 | Lógica de registro y estados de envío con dobles de prueba. |
+| Unitario | `tests/unitarios/ficha.test.js` | Controlador `iniciarFicha`, grupo dinámico (1–5) y duración horas/min | 13 | Reglas del formulario de ficha de forma aislada y rápida. |
+| Unitario | `tests/unitarios/listado.test.js` | Controlador `iniciarListado`, KPIs, normalización sin tildes y borrado | 12 | Funciones puras de filtrado/ordenación y controlador aislado. |
+| Unitario | `tests/unitarios/usuarios-pagina.test.js` | Controlador `iniciarUsuarios`, bloqueo propio del admin y cambio de rol | 10 | Reglas de gobernanza y renderizado seguro sin `innerHTML`. |
+| Integración | `tests/integracion/ficha.test.js` | `ficha.html` real: `salir`/`escribir`, foco en error, `FormData` y edición | 5 | Verifica el encaje real entre los `id`/`name`/`data-validar` del HTML y los módulos JS. |
+| Integración | `tests/integracion/listado.test.js` | `listado.html` real: buscador con *debounce* (`vi.useFakeTimers()`), paginación y `<dialog>` | 3 | Comprueba temporizadores, URL y delegación sobre el markup real. |
+| Integración | `tests/integracion/usuarios.test.js` | `usuarios.html` real: expulsión con aviso de no-admin, redirección y cambio de rol | 3 | Verifica la protección real de la página administrativa y su tabla `<template>`. |
+| Extremo a extremo | `e2e/sesion.spec.js` | Registro de primer usuario (admin), visita a `Usuarios`, cierre de sesión y reentrada | 1 | Prueba el flujo real completo entre páginas, CSS, SHA-256 y `sessionStorage` en Chromium. |
+| Extremo a extremo | `e2e/crud.spec.js` | Alta en ficha, recarga, edición, cancelación y confirmación en `<dialog>` de borrado | 1 | Garantiza la persistencia real en `localStorage` y la navegación completa en navegador real. |
+
+En total: **203 tests unitarios** (14 ficheros), **11 tests de integración** (3 ficheros) y **2 recorridos E2E** (2 ficheros).
+
+### Simulación de usuario, servicios y tiempo
+
+- **Usuario en integración:** [tests/pagina.js](tests/pagina.js) carga el `<title>` y `<body>` real de cada HTML en `happy-dom` con `cargarPagina(fichero)`, y simula entradas con `escribir(campo, valor)` (`input` con `bubbles: true`), salidas de campo con `salir(campo)` (`FocusEvent('blur')` sin burbuja para activar la fase de captura), cambios en selects/checkboxes con `Event('change', { bubbles: true })`, clics en botones y envíos con `formulario.requestSubmit()`.
+- **Servicios:** el almacenamiento (`localStorage` y `sessionStorage`) se sustituye por instancias limpias de `AlmacenFalso` ([tests/AlmacenFalso.js](tests/AlmacenFalso.js)); la navegación (`location.replace`) se sustituye por espías `vi.fn()`; `ubicacion` e `historia` (`replaceState`) se pasan como objetos simulados; y en `js/clave.js`, Web Crypto funciona nativamente en Node/Happy-DOM (o se usan hashes precalculados en los tests de usuarios/sesión que no ejercitan `resumirClave`).
+- **Tiempo:** en `tests/integracion/listado.test.js` se usa `vi.useFakeTimers()` y `vi.advanceTimersByTime(RETRASO_DEBOUNCE_DEFECTO)` para comprobar de forma determinista que el buscador no filtra antes de los `250 ms` y sí lo hace al cumplirse el plazo.
+
+### Ejecución de las pruebas E2E en local y contra despliegue
+
+`playwright.config.js` lee la variable de entorno `BASE_URL`:
+- **En local con `serve`:** ejecutando `npm run e2e`, Playwright arranca `serve` en `http://localhost:3901` (o reutiliza el del Dev Container) y ejecuta los recorridos con rutas relativas (`/registro.html`, `/index.html`, `/listado.html`).
+- **Contra una web desplegada:** pasando `BASE_URL=https://<proyecto>.vercel.app npm run e2e`, Playwright no arranca ningún servidor local y lanza los mismos recorridos contra la URL indicada.
+
+### Salida de cobertura y E2E
+
+Salida de `npm run coverage` (214 tests en 17 ficheros, umbral de líneas ≥ `90 %`):
+
+```text
+> mi-aplicacion@1.0.0 coverage
+> vitest run --coverage
+
+ Test Files  17 passed (17)
+      Tests  214 passed (214)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   97.79 |    91.13 |   94.44 |   97.76 |                   
+ paginacion.js     |   95.45 |    80.82 |   88.88 |   95.34 | 101,138,217,223   
+ ...res-entidad.js |     100 |      100 |     100 |     100 |                   
+ validadores.js    |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------
+```
+
+Salida de `npm run e2e`:
+
+```text
+Running 2 tests using 2 workers
+
+  ✓  1 [chromium] › e2e/sesion.spec.js:4:1 › sesión y roles: registrarse como primer usuario (admin), cerrar sesión y volver a entrar (3.1s)
+  ✓  2 [chromium] › e2e/crud.spec.js:4:1 › CRUD completo: crear entrenamiento, recargar, editar y borrar con confirmación (3.8s)
+
+  2 passed (7.6s)
+```
+
+- **Umbral configurado:** en `vitest.config.js` se mide la cobertura sobre las funciones puras (`js/validadores.js`, `js/validadores-entidad.js` y `js/paginacion.js`) con `thresholds: { lines: 90 }`, alcanzando un **97,76 %** global (`100 %` en ambos ficheros de validadores y `95,34 %` en `paginacion.js`).
+- **Qué queda fuera del umbral y por qué:** los controladores de página (`js/paginas/*.js`) y el pegamento de DOM/almacenamiento (`avisos.js`, `sesion.js`, `validacion-formularios.js`) no se incluyen en el umbral automático de líneas puras porque dependen de interacciones DOM/entorno navegador que se cubren con tests de integración y E2E; dentro de `paginacion.js`, las 4 líneas sin cubrir (`101, 138, 217, 223`) corresponden únicamente a guardas defensivas cuando faltan parámetros de entorno (`!historia || !ubicacion`, `!contenedorLista || !documento`, o clic en botón ya deshabilitado).
 
 ## Integración continua
 
@@ -353,16 +418,18 @@ Durante la implementación de la autenticación asíncrona con la Web Crypto API
 
 ### El workflow
 
-El flujo de integración continua está configurado en `.github/workflows/ci.yml`. Se ejecuta automáticamente ante cada `push` y en cada `pull_request` dirigido a la rama `main`, garantizando que ningún código roto o con estilo no conforme entre en el tronco principal. Cuenta con permisos restringidos de solo lectura (`permissions: contents: read`).
+El flujo de integración continua está configurado en `.github/workflows/ci.yml`. Se ejecuta automáticamente ante cada `push` y en cada `pull_request` dirigido a la rama `main`, garantizando que ningún código roto o con estilo no conforme entre en el tronco principal. Cuenta con permisos restringidos de solo lectura (`permissions: contents: read`) y control de concurrencia (`concurrency` por `${{ github.workflow }}-${{ github.ref }}` con `cancel-in-progress: true`) para cancelar ejecuciones obsoletas si se suben varios commits seguidos en la misma rama.
 
 | Trabajo | Espera a | Pasos | Artefacto |
 |---------|----------|-------|-----------|
 | `Calidad` | — | 1. Checkout del repositorio (`actions/checkout@v4`).<br>2. Configuración de Node.js 24 con caché npm (`actions/setup-node@v4`).<br>3. Instalación limpia (`npm ci`).<br>4. Verificación de reglas de ESLint (`npm run lint`).<br>5. Verificación de formateo con Prettier (`npm run format:check`). | — |
-| `Tests` | `Calidad` | 1. Checkout del código.<br>2. Configuración de Node.js 24 y caché npm.<br>3. Instalación de dependencias (`npm ci`).<br>4. Ejecución de suite de pruebas unitarias e integración con Vitest (`npm test`). | — *(Sprint 2)* |
-| `E2E` *(Sprint 2)* | `Tests` | Pruebas de extremo a extremo con Playwright. | `playwright-report/` *(si falla)* |
+| `Tests` | `Calidad` | 1. Checkout del código.<br>2. Configuración de Node.js 24 y caché npm.<br>3. Instalación de dependencias (`npm ci`).<br>4. Ejecución de tests unitarios e integración y comprobación del umbral del `90 %` (`npm run coverage`).<br>5. Subida del informe HTML como artefacto (`actions/upload-artifact@v4`). | `coverage/` |
+| `E2E` | `Tests` | 1. Checkout del código.<br>2. Configuración de Node.js 24 y caché npm.<br>3. Instalación de dependencias (`npm ci`).<br>4. Instalación de Chromium (`npx playwright install --with-deps chromium`).<br>5. Ejecución de Playwright (`npm run e2e`).<br>6. Subida del informe si falla (`if: failure()`). | `playwright-report/` *(solo si falla)* |
 
 **¿Por qué están en este orden?**  
-El trabajo de `Calidad` es muy rápido y descarta errores sintácticos, variables no utilizadas o incoherencias de estilo en segundos. El trabajo de `Tests` requiere más tiempo y cómputo; al depender de `Calidad` mediante `needs: Calidad`, nos aseguramos de no malgastar minutos de Actions ejecutando pruebas si el código ya contiene fallos básicos de estilo o reglas estáticas incumplidas.
+`Calidad` tarda unos pocos segundos y descarta fallos sintácticos, variables sin uso o infracciones de estilo antes de ejecutar pruebas. `Tests` depende de `Calidad` (`needs: Calidad`) para no gastar cómputo si el código no cumple el linter/formateo, y valida tanto la lógica como el umbral de cobertura. Por último, `E2E` depende de `Tests` (`needs: Tests`) porque instalar Chromium y levantar el servidor con `serve` es el paso más costoso y no tiene sentido ejecutarlo si han fallado las pruebas unitarias o de integración.
+
+**Ejecución en verde con artefacto de cobertura:** [Workflow CI en verde (run #44506503417)](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/actions/runs/44506503417)
 
 ## Despliegue continuo
 
@@ -389,7 +456,7 @@ El trabajo de `Calidad` es muy rápido y descarta errores sintácticos, variable
 
 Para dar una tarea por terminada en el tablero y poder fusionar su rama a main:
 - [x] El código pasa `npm run lint` y `npm run format:check` sin avisos ni errores.
-- [x] La funcionalidad está probada con tests de Vitest y todos pasan en verde (`npm test`).
+- [x] La funcionalidad está probada con Vitest (`npm test` / `npm run coverage` ≥ 90 %) y con Playwright (`npm run e2e`) en verde.
 - [x] No se utilizan librerías de terceros en JavaScript ni APIs remotas.
 - [x] Se comprueba la seguridad de sesión y los permisos de usuario/administrador.
 - [x] La Pull Request en GitHub tiene el workflow de integración continua en verde.
@@ -399,8 +466,8 @@ Para dar una tarea por terminada en el tablero y poder fusionar su rama a main:
 | Sprint | *Tag* | Qué incluye | Reflexión |
 |--------|-------|-------------|-----------|
 | 1 | `v0.1` | Gestión de usuarios en `localStorage`, roles (`administrador` para el primer usuario), resumen SHA-256 (`js/clave.js`), control de sesión en `sessionStorage`, avisos por `CustomEvent`, formularios de registro y login con validaciones en tiempo real y anti-doble envío, suite de 74 tests unitarios y workflow de CI (Calidad + Tests). | La modularización en ES Modules con inyección de dependencias (`AlmacenFalso`) ha permitido alcanzar más de un 90% de cobertura sin tocar el navegador. Fue clave entender el asincronismo de la Web Crypto API y resolver las condiciones de carrera con banderas de estado en el formulario. Para el Sprint 2 planificaremos con mayor antelación el modelado de la entidad y la paginación. |
-| 2 | `v0.2` | El CRUD y la zona de administración, con todas sus pruebas y la integración continua completa. | *(Pendiente)* |
-| 3 | `v1.0` | Despliegue en producción con Vercel, pruebas de extremo a extremo con Playwright y entrega final. | *(Pendiente)* |
+| 2 | `v0.2` | Entidad deportiva en `localStorage` aislada por usuario, validadores con regex y reglas fisiológicas, paginación pura sincronizada con URL, ficha con campo condicional y grupo dinámico (1–5), validación en tiempo real en captura/burbuja en los 3 formularios, listado con *debounce* y `<dialog>`, zona de administración de roles, tests de integración en `happy-dom`, cobertura ≥ 90 %, recorridos E2E con Playwright y pipeline CI completo de 3 trabajos (`Calidad` → `Tests` → `E2E`). | Centralizar la validación en `js/validacion-formularios.js` usando `blur` en captura y `data-validar` evitó duplicar lógica en los 3 formularios, aunque las pruebas de integración sobre HTML real destaparon sutiles diferencias como el falso `stepMismatch` de `happy-dom` con `step="0.01"`. Completar la pirámide (203 unitarios + 11 integración + 2 E2E) con un `97,76 %` de cobertura en funciones puras da una base muy sólida para afrontar el despliegue continuo en Vercel en el Sprint 3. |
+| 3 | `v1.0` | Despliegue en producción con Vercel, pruebas de extremo a extremo contra lo desplegado, prueba de humo y Release. | *(Pendiente)* |
 
 **Tablero de Trello:**
 https://trello.com/invite/b/6aec9ce9063c16b7c0047ea8/ATTI178831c6a60f25f26ec0e00a2054500d26E02A60/dwec-sportlog
@@ -434,5 +501,9 @@ El archivo `.gitignore` excluye `node_modules/`, `dist/`, `docs/`, `coverage/`, 
 | `sprint-2-validacion-tiempo-real` | Sistema de validación en tiempo real en los 3 formularios (S2-06) | [#17](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/17) |
 | `sprint-2-listado` | Listado con buscador con debounce, paginación y borrado modal (S2-07) | [#18](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/18) |
 | `sprint-2-usuarios` | Zona de administración de usuarios y gestión de roles (S2-08) | [#19](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/19) |
+| `sprint-2-readme` | Actualización de documentación del README hasta S2-08 | [#20](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/20) |
+| `sprint-2-integracion` | Tests de integración de páginas y umbral de cobertura (S2-09) | [#21](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/21) |
+| `sprint-2-e2e` | Recorridos End-to-End con Playwright (S2-10) | [#22](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/22) |
+| `sprint-2-cierre` | Pipeline CI Paso 2, blog, documentación y cierre de Sprint 2 (S2-11) | [#23](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/23) |
 
-**Versión de entrega actual:** `v0.1`
+**Versión de entrega actual:** `v0.2`
