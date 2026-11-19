@@ -26,3 +26,32 @@ export function iniciarSesion(usuario, almacen = sessionStorage) {
 ```
 
 Otro concepto fundamental aprendido ha sido la **inyección de dependencias** para hacer el código 100% testeable sin depender del entorno real del navegador. Al principio pensábamos que para probar funciones de lectura o guardado en Vitest era obligatorio interactuar con el objeto global `window.localStorage` (lo que crearía dependencias cruzadas entre tests). Al parametrizar el almacenamiento (`almacen = localStorage`) y la función de navegación (`navegar = (url) => location.replace(url)`), pudimos pasar instancias limpias de `AlmacenFalso` y espías de función `vi.fn()` en los tests unitarios. De este modo, podemos verificar que una función redirige correctamente a `listado.html` simplemente comprobando que `navegar` fue llamada con ese argumento, sin alterar la ventana real del navegador.
+
+## 19/11/2026 · Sprint 2 · Validación en captura, pruebas reales en Happy-DOM y Playwright con selectores accesibles
+
+### Dificultades y cómo las resolví
+
+La primera dificultad apareció al escribir las pruebas de integración de `ficha.html` cargando el HTML real con `cargarPagina('ficha.html')` en `happy-dom`. Los tests unitarios previos pasaban sin problemas, pero el test de integración no guardaba el entrenamiento aunque todos los campos parecían válidos. Al inspeccionar la implementación de `ValidityState` en `happy-dom`, descubrimos que valida `step="0.01"` haciendo `Number(value) % Number(step) !== 0`. En aritmética binaria IEEE-754, `21.1 % 0.01` da un residuo distinto de cero (`9.8e-16`), por lo que `happy-dom` marcaba `stepMismatch = true` en cualquier distancia positiva. La solución fue usar `step="any"` en `#distancia` en `ficha.html`, lo que permite decimales arbitrarios en navegadores reales y evita el falso positivo de `stepMismatch`.
+
+La segunda dificultad surgió al construir las pruebas de extremo a extremo con Playwright en `e2e/crud.spec.js`. Al comprobar que la distancia del nuevo entrenamiento aparecía en el listado con `page.getByText('21.1 km')`, Playwright falló por *strict mode violation* porque el texto `21.1 km` aparecía tanto en la tarjeta KPI superior (*Distancia Total*) como en la tarjeta del listado. Lo resolvimos acotando el localizador al *landmark* semántico correspondiente: `page.getByRole('region', { name: 'Listado de entrenamientos' }).getByText('21.1 km')`, manteniendo selectores accesibles sin recurrir a clases CSS frágiles.
+
+La tercera dificultad fue evitar errores de validación sobre campos ocultos al implementar el bloque condicional de competición en `ficha.html`. Si ocultábamos el contenedor únicamente con `hidden`, el navegador seguía validando los atributos `required` internos e impedía enviar el formulario cuando no era competición. La solución fue combinar `hidden` en el bloque contenedor con `disabled = true` en `#nombre-competicion` y `#dorsal`, limpiando además su valor y revalidando al desmarcar la casilla para que ni se validen ni se incluyan en `FormData`.
+
+### Problemas conceptuales
+
+Un concepto clave de este sprint ha sido **por qué `blur` necesita la fase de captura mientras `input` y `click` usan delegación en burbuja**. A diferencia de `input` o `click`, el evento `blur` **no burbujea** hacia los elementos padre. Si registráramos `formulario.addEventListener('blur', ...)` en fase de burbuja, el formulario nunca se enteraría de que el usuario ha salido de un `<input>`. Al pasar `true` como tercer parámetro en `js/validacion-formularios.js`, el formulario intercepta el evento durante la bajada hacia el campo objetivo, cubriendo tanto campos iniciales como las filas añadidas dinámicamente en el grupo de ejercicios:
+
+```javascript
+// js/validacion-formularios.js (Líneas 421-424)
+// `blur` no burbujea: se escucha en fase de captura para cubrir campos estáticos y dinámicos
+formulario.addEventListener('blur', manejarBlur, true);
+formulario.addEventListener('input', manejarCambio);
+formulario.addEventListener('change', manejarCambio);
+```
+
+Otro concepto fundamental ha sido distinguir los **tres niveles de la pirámide de pruebas** y qué papel cumple cada uno:
+- **Unitarias:** prueban funciones puras y capas de datos aisladas (`paginar`, validadores con `it.each`, `entrenamientos.js` con `AlmacenFalso`) en milisegundos.
+- **Integración:** cargan el `<body>` real de cada página HTML en `happy-dom` (`tests/pagina.js`) conectando sus controladores reales con `AlmacenFalso`, `vi.fn()` y `vi.useFakeTimers()` para comprobar el *debounce* del buscador o la validación al salir/escribir sin levantar un navegador real.
+- **Extremo a extremo (Playwright):** arrancan la web servida con `serve` en Chromium real y verifican recorridos completos de usuario (`registro` -> `usuarios` -> `cerrar sesión` -> `login` y ciclo completo de `CRUD` sobreviviendo a `page.reload()`).
+
+Finalmente, en `ci.yml` comprendimos el valor de `needs` y `concurrency`: encadenar `Calidad -> Tests -> E2E` evita instalar Chromium y ejecutar Playwright si ya ha fallado ESLint o el umbral de cobertura, mientras que `concurrency` con `cancel-in-progress: true` agrupado por `${{ github.workflow }}-${{ github.ref }}` cancela ejecuciones obsoletas cuando se suben commits seguidos en una misma rama.
