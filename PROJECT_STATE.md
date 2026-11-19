@@ -1,9 +1,9 @@
 # Estado del Proyecto: SportLog
 
-- **Última actualización:** 10/11/2026
-- **Versión del documento:** 1.0.0
+- **Última actualización:** 19/11/2026
+- **Versión del documento:** 2.0.0
 - **Responsable del proyecto:** Equipo de Desarrollo DWEC (2º DAWT)
-- **Versión actual de código:** `v0.1` (Sprint 1 Completado)
+- **Versión actual de código:** `v0.2` (Sprint 2 Completado)
 
 ---
 
@@ -11,7 +11,7 @@
 
 **SportLog** es una aplicación web *client-first* diseñada para que deportistas y atletas registren, analicen y den seguimiento a sus sesiones de entrenamiento (fuerza, carrera, ciclismo, natación) y marcas personales sin depender de servidores externos ni comprometer su privacidad. Toda la persistencia y la lógica de validación se ejecutan localmente en el navegador del usuario.
 
-> **Estado global actual:** El **Sprint 1 (v0.1)** está 100% completado, probado y fusionado en `main`, contando con autenticación segura cliente (SHA-256), roles de usuario, sistema desacoplado de avisos accesibles, validación interactiva y un pipeline de CI en GitHub Actions en verde.
+> **Estado global actual:** El **Sprint 2 (v0.2)** está 100% completado, probado y fusionado en `main`, con CRUD completo aislado por usuario, ficha con campo condicional y grupo dinámico, validación en tiempo real en captura/burbuja, listado con *debounce* y `<dialog>`, zona de administración de roles, pirámide de pruebas completa (203 unitarios, 11 integración, 2 E2E con Playwright), cobertura del `97,76 %` en funciones puras y pipeline CI completo (`Calidad` → `Tests` → `E2E`).
 
 ---
 
@@ -19,10 +19,10 @@
 
 ### Objetivos principales
 1. **Gestión de Identidad y Roles (Sprint 1 - Completado):** Registro interactivo, login con cifrado SHA-256 vía Web Crypto API, control de sesiones en `sessionStorage` y autorización por roles (`administrador` vs `usuario`).
-2. **CRUD Completo de Sesiones Deportivas (Sprint 2 - Pendiente):** Alta, edición, borrado con confirmación modal (`<dialog>`) y visualización de entrenamientos en `localStorage`, garantizando aislamiento por usuario.
-3. **Listado, Búsqueda y Paginación (Sprint 2 - Pendiente):** Vista tabular y de tarjetas construida desde `<template>` con búsqueda reactiva con *debounce*, ordenación y paginación navegable mediante URL (`URLSearchParams`).
-4. **Zona de Administración (Sprint 2 - Pendiente):** Panel exclusivo para administradores (`usuarios.html`) para auditar usuarios y cambiar roles.
-5. **Despliegue Continuo y E2E (Sprint 3 - Pendiente):** Publicación automática en Vercel, suite de pruebas end-to-end con Playwright y auditoría de accesibilidad.
+2. **CRUD Completo de Sesiones Deportivas (Sprint 2 - Completado):** Alta, edición, borrado con confirmación modal (`<dialog>`) y visualización de entrenamientos en `localStorage`, garantizando aislamiento por usuario.
+3. **Listado, Búsqueda y Paginación (Sprint 2 - Completado):** Vista de tarjetas construida desde `<template>` con búsqueda reactiva con *debounce*, filtro por disciplina y paginación navegable mediante URL (`URLSearchParams`).
+4. **Zona de Administración (Sprint 2 - Completado):** Panel exclusivo para administradores (`usuarios.html`) para buscar, filtrar, paginar usuarios y cambiar roles con seguridad.
+5. **Despliegue Continuo y Entrega (Sprint 3 - Pendiente):** Publicación automática en Vercel con Deployment Checks, vistas previas probadas (`despliegue.yml`), prueba de humo (`e2e/humo.spec.js`), `release.yml`, JSDoc completo y Release `v1.0`.
 
 ### Fuera de alcance (Anti-Scope Creep)
 - ❌ **No backend propio / No bases de datos remotas:** Todo debe residir en `localStorage` y `sessionStorage`.
@@ -144,44 +144,42 @@
 - [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — (12/11/2026) — Implementación de `js/paginas/ficha.js` y conexión en `ficha.html`. Modo alta vs edición (`?id=...`), campo condicional interactivo con `hidden` y `disabled`, fecha máxima de hoy por código, lectura con `FormData` y redirección con aviso. 7 tests unitarios en `tests/unitarios/ficha.test.js`. PR #15.
 - [x] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios y duración horas/minutos** — (12/11/2026) — Plantilla `<template id="plantilla-ejercicio">` con límites de 1 a 5 ejercicios, botones interactivos desactivados en extremos, IDs dinámicos y enlaces de accesibilidad (`htmlFor`, `aria-describedby`), extracción con `FormData.getAll()`, cálculo matemático automático de horas y minutos a minutos totales (`#duracion`), y 9 tests unitarios en `tests/unitarios/ficha.test.js`. PR #16.
 - [x] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — (17/11/2026) — Creación de `js/validacion-formularios.js` (`iniciarValidacionFormulario`, `validadoresFormulario`) e integración en `index.html`, `registro.html` y `ficha.html` con `novalidate`, `data-validar`, `data-depende-de`, `setCustomValidity`, `aria-describedby`, `aria-invalid`, `is-invalid`/`invalid-feedback` y foco en el primer error. 183 tests unitarios en verde. PR #17.
+- [x] **S2-07: Listado de entrenamientos con buscador con debounce y borrado modal** — (18/11/2026) — Implementación de `js/paginas/listado.js` y `listado.html`: KPIs, tarjetas desde `<template>` sin `innerHTML`, filtro por disciplina, buscador sin tildes con *debounce*, paginación por URL, borrado con `<dialog>` nativo y 12 tests unitarios. PR #18.
+- [x] **S2-08: Zona de administración de usuarios y gestión de roles** — (18/11/2026) — Implementación de `js/paginas/usuarios.js` y `usuarios.html`: guarda `protegerPaginaAdmin`, listado paginado desde `<template>`, buscador y filtro por rol, cambio de rol con `<dialog>`, bloqueo del propio botón del admin actual y 10 tests unitarios. PR #19.
+- [x] **S2-09: Tests de integración de páginas y pirámide de pruebas** — (19/11/2026) — Pruebas de integración en `tests/integracion/` cargando HTML reales con `tests/pagina.js` (`ficha.test.js`, `listado.test.js`, `usuarios.test.js`), ajuste `step="any"` en `#distancia` en `ficha.html`, y configuración de umbral de cobertura ≥ 90 % en `vitest.config.js`. 214 tests en verde. PR #21.
+- [x] **S2-10: Pruebas End-to-End con Playwright** — (19/11/2026) — Recorridos completos en `e2e/` (`ayudas.js`, `sesion.spec.js`, `crud.spec.js`) con selectores accesibles y rutas relativas pasando en Chromium contra `serve`. PR #22.
+- [x] **S2-11: Integración continua completa (Paso 2) y cierre del Sprint 2 (v0.2)** — (19/11/2026) — Pipeline CI en `.github/workflows/ci.yml` (`Calidad` → `Tests` con `coverage` + artefacto → `E2E` con Playwright + artefacto en fallo, y `concurrency`), entrada Sprint 2 en `blog/README.md`, secciones de `README.md` y etiqueta `v0.2`. PR #23.
 
 ---
 
 ## 🚧 En Progreso
 
-- [ ] **Sprint 2 (v0.2): CRUD de Entidades, Administración y CI Completa:**
-  - *Estado:* Tareas S2-01 a S2-06 completadas e integradas en `main` (PRs #12 a #17).
-  - *Siguiente paso inmediato (pendiente de reanudación):* Comenzar con la tarea `S2-07: Listado con buscador con debounce y borrado modal` en la rama `sprint-2-listado`.
+- [ ] **Sprint 3 (v1.0): Despliegue continuo en Vercel, pruebas contra lo desplegado, Release y entrega final:**
+  - *Estado:* Sprint 2 (`v0.2`) cerrado e integrado en `main`.
+  - *Siguiente paso inmediato:* Conectar el repositorio en Vercel (`npm run build` / `dist`), configurar Deployment Checks y crear `.github/workflows/despliegue.yml`, `e2e/humo.spec.js` y `.github/workflows/release.yml`.
 
 ---
 
 ## 📌 Pendiente (Backlog)
 
-### Must have (Tarjetas planificadas para Sprint 2 · v0.2)
-- [x] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — Prioridad: Alta — Dep: S1-04, S1-05 (Completado en PR #12)
-- [x] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — Prioridad: Alta — Dep: Ninguna (Completado en PR #13)
-- [x] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna (Completado en PR #14)
-- [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02 (Completado en PR #15)
-- [x] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios y duración horas/min** — Prioridad: Alta — Dep: S2-04 (Completado en PR #16)
-- [x] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — Prioridad: Alta — Dep: S1-06, S1-07, S2-04, S2-05 (Completado en PR #17)
-- [ ] **S2-07: Listado con buscador con debounce y borrado modal** — Prioridad: Alta — Dep: S2-01, S2-03
-- [ ] **S2-08: Zona de administración de usuarios y roles** — Prioridad: Media — Dep: S1-04, S2-03
-- [ ] **S2-09: Tests de integración de páginas** — Prioridad: Alta — Dep: S2-04, S2-05, S2-07, S2-08
-- [ ] **S2-10: Pruebas E2E con Playwright** — Prioridad: Alta — Dep: S2-07, S2-08
-- [ ] **S2-11: CI Paso 2, blog post y cierre del Sprint 2 (v0.2)** — Prioridad: Alta — Dep: S2-09, S2-10
-- [x] **S2-03: Módulo de Paginación pura y navegación por URL** — Prioridad: Alta — Dep: Ninguna (Completado en PR #14)
-- [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Prioridad: Alta — Dep: S2-01, S2-02 (Completado en PR #15)
-- [ ] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios** — Prioridad: Alta — Dep: S2-04
-- [ ] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — Prioridad: Alta — Dep: S2-02, S2-04
-- [ ] **S2-07: Listado de entrenamientos con buscador con debounce y borrado modal** — Prioridad: Alta — Dep: S2-01, S2-03
-- [ ] **S2-08: Zona de administración de usuarios y gestión de roles** — Prioridad: Alta — Dep: S1-04, S1-05, S2-03
-- [ ] **S2-09: Tests de integración de páginas y pirámide de pruebas** — Prioridad: Alta — Dep: S2-04, S2-07, S2-08
-- [ ] **S2-10: Pruebas End-to-End con Playwright** — Prioridad: Alta — Dep: S2-07, S2-08, S2-09
-- [ ] **S2-11: Integración continua completa (Paso 2) y cierre del Sprint 2 (v0.2)** — Prioridad: Alta — Dep: S2-01 a S2-10
+### Sprint 2 · v0.2 (Completado)
+- [x] **S2-01: Módulo de datos de Entidades y almacenamiento por usuario** — Completado en PR #12
+- [x] **S2-02: Validadores de la entidad deportiva con expresiones regulares** — Completado en PR #13
+- [x] **S2-03: Módulo de Paginación pura y navegación por URL** — Completado en PR #14
+- [x] **S2-04: Formulario de Ficha - Alta y edición con campo condicional** — Completado en PR #15
+- [x] **S2-05: Formulario de Ficha - Grupo dinámico de ejercicios y duración horas/min** — Completado en PR #16
+- [x] **S2-06: Sistema de validación en tiempo real en los 3 formularios** — Completado en PR #17
+- [x] **S2-07: Listado de entrenamientos con buscador con debounce y borrado modal** — Completado en PR #18
+- [x] **S2-08: Zona de administración de usuarios y gestión de roles** — Completado en PR #19
+- [x] **S2-09: Tests de integración de páginas y pirámide de pruebas** — Completado en PR #21
+- [x] **S2-10: Pruebas End-to-End con Playwright** — Completado en PR #22
+- [x] **S2-11: Integración continua completa (Paso 2) y cierre del Sprint 2 (v0.2)** — Completado en PR #23
 
-### Should have (Sprint 3 · v1.0)
-- [ ] **Despliegue Continuo en Vercel (Requisitos 24-25):** Configuración de despliegue automatizado, chequeos de compilación y verificación de rutas limpias. — Prioridad: Media — Dep: Sprint 2
-- [ ] **Pruebas End-to-End completas:** Cobertura de flujos críticos con Playwright contra la web desplegada. — Prioridad: Media — Dep: Despliegue
+### Must have (Sprint 3 · v1.0)
+- [ ] **S3-01: Despliegue en Vercel y Deployment Checks (Requisitos 24-25):** Proyecto en Vercel (`npm run build`, salida `dist`), desactivar protección de despliegues y exigir `Calidad`, `Tests`, `E2E` y `E2E desplegado`.
+- [ ] **S3-02: Workflow de pruebas contra lo desplegado (`.github/workflows/despliegue.yml`):** Ejecutar `npm run e2e` con `BASE_URL` en cada evento `deployment_status` con `state == 'success'`.
+- [ ] **S3-03: Prueba de humo y Releases (`.github/workflows/release.yml`, `e2e/humo.spec.js`):** Al subir un tag `v*`, ejecutar `Comprobar` → `Humo` → `Release` adjuntando `dist/` comprimido.
+- [ ] **S3-04: Evidencias, JSDoc completo, blog Sprint 3 y entrega `v1.0` (Requisitos 28-29):** Capturas `img/pr-comprobaciones.png` y `img/vercel-retenido.png`, versión retenida demostrada, `npm run docs` (`@listens`, `@fires`, `@typedef`, `@example`), entrada Sprint 3 en `blog/README.md` y tag `v1.0`.
 
 ### Nice to have (Mejoras opcionales)
 - [ ] **Exportación / Importación de entrenamientos:** Descarga de sesiones en archivo JSON local para copias de seguridad personales. — Prioridad: Baja — Dep: CRUD
@@ -220,17 +218,10 @@
 
 ## 🔄 Cómo Continuar (Guía para la siguiente IA / sesión)
 
-### Próximos 3 pasos concretos a ejecutar
-1. **Crear la rama para el modelo de datos de entrenamientos del Sprint 2:**
-   ```bash
-   git checkout main
-   git pull origin main
-   git checkout -b sprint-2-entidades
-   ```
-2. **Definir el módulo de datos `js/entrenamientos.js`:**
-   - Implementar las funciones de persistencia: `obtenerEntrenamientos(usuario, almacen)`, `guardarEntrenamientos(usuario, lista, almacen)`, `crearEntrenamiento(usuario, datos, almacen)` con IDs generados mediante `crypto.randomUUID()`.
-   - Asegurar tolerancia a JSON corrupto en `localStorage`.
-3. **Escribir sus tests unitarios correspondientes en `tests/unitarios/entrenamientos.test.js`** utilizando `AlmacenFalso` antes de avanzar a los controladores de la interfaz.
+### Próximos 3 pasos concretos a ejecutar (Sprint 3)
+1. **Conectar el repositorio en Vercel** (Framework `Other`, Build `npm run build`, Output `dist`) y desactivar *Vercel Authentication* para vistas previas públicas.
+2. **Configurar Deployment Checks en Vercel** exigiendo `Calidad`, `Tests`, `E2E` y `E2E desplegado`.
+3. **Implementar `.github/workflows/despliegue.yml`, `e2e/humo.spec.js` y `.github/workflows/release.yml`** para cerrar el despliegue continuo y la Release `v1.0`.
 
 ### Comandos de entorno
 
@@ -297,6 +288,19 @@ docker exec -w /workspaces/dwec-2dawt-2627-proyectodomeval-ccruper0503 e6aa7e5a8
   - [PR #8: S1-09 Tests unitarios consolidados](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/8)
   - [PR #9: S1-10 Workflow CI GitHub Actions](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/9)
   - [PR #10: S1-11 Cierre de Sprint 1 (v0.1)](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/10)
+  - [PR #11: Dinamización de vistas y registro continuo](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/11)
+  - [PR #12: S2-01 Módulo de entrenamientos](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/12)
+  - [PR #13: S2-02 Validadores de entidad](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/13)
+  - [PR #14: S2-03 Paginación pura y URL](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/14)
+  - [PR #15: S2-04 Ficha base y campo condicional](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/15)
+  - [PR #16: S2-05 Ficha grupo dinámico y duración](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/16)
+  - [PR #17: S2-06 Validación en tiempo real](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/17)
+  - [PR #18: S2-07 Listado con debounce y diálogo](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/18)
+  - [PR #19: S2-08 Administración de usuarios y roles](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/19)
+  - [PR #20: Documentación del README hasta S2-08](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/20)
+  - [PR #21: S2-09 Tests de integración y cobertura](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/21)
+  - [PR #22: S2-10 Pruebas E2E con Playwright](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/22)
+  - [PR #23: S2-11 Pipeline CI Paso 2 y cierre Sprint 2 (v0.2)](https://github.com/fpftoro-docencia/dwec-2dawt-2627-proyectodomeval-ccruper0503/pull/23)
 
 ---
 
@@ -304,6 +308,7 @@ docker exec -w /workspaces/dwec-2dawt-2627-proyectodomeval-ccruper0503 e6aa7e5a8
 
 | Fecha | Versión | Cambio realizado | Responsable |
 |:---:|:---:|---|:---:|
+| 19/11/2026 | 2.0.0 | Cierre completo del Sprint 2 (`v0.2`), limpieza de backlog duplicado y planificación de Sprint 3 (`v1.0`). | Lead Architect (Pair AI) |
 | 10/11/2026 | 1.1.0 | Creación y sincronización de las 11 tarjetas de Trello para el Sprint 2 (S2-01 a S2-11) y actualización del backlog. | Lead Architect (Pair AI) |
 | 10/11/2026 | 1.0.0 | Creación inicial del documento tras el cierre y etiquetado del Sprint 1 (`v0.1`). | Lead Architect (Pair AI) |
 
