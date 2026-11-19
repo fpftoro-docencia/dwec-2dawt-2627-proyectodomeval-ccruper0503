@@ -21,7 +21,7 @@ La entidad principal de la aplicación es la **sesión de entrenamiento deportiv
 | Disciplina deportiva | Desplegable (`select`) | Sí | Opción válida (`running`, `trail`, `ciclismo`, `mtb`, `fuerza`, `natacion`, `hiit`, `otro`) | Selecciona una opción válida. |
 | Fecha del entrenamiento | Fecha (`input date`) | Sí | Obligatoria y no posterior a hoy (`max` fijado por código) | Este campo es obligatorio. / El valor máximo permitido es `<hoy>`. |
 | Duración (horas y minutos) | Número (`input number` × 2) | Sí | Entero total ≥ 1 min (`duracionTotal` entre `0h`–`24h` y `0`–`59` min) | La duración total debe ser de al menos 1 minuto. |
-| Distancia (km) | Número (`input number`, `step="0.01"`) | No | Número ≥ 0 (`min="0"`) | El valor mínimo permitido es 0. |
+| Distancia (km) | Número (`input number`, `step="any"`) | No | Número ≥ 0 (`min="0"`) | El valor mínimo permitido es 0. |
 | Pulso medio (ppm) | Número (`input number`) | No | `data-validar="pulsaciones"` (`REGEX_FRECUENCIA_CARDIACA` + rango lógico `40`–`240` bpm, `min="40"`, `max="230"` en HTML) | La frecuencia cardíaca debe encontrarse en un rango válido entre 40 y 240 bpm. |
 | Calorías (kcal) | Número (`input number`) | No | Número ≥ 0 (`min="0"`) | El valor mínimo permitido es 0. |
 | Esfuerzo percibido (RPE) | Deslizador (`input range`) | No | Entero entre `1` y `10` (valor por defecto `7`) | El valor mínimo/máximo permitido es 1 / 10. |
